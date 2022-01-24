@@ -20,7 +20,7 @@ import {
   getFirestore,
   collection,
   query,
-  limit,
+  increment,
   doc,
   where,
   setDoc,
@@ -82,7 +82,7 @@ function Profile(props) {
     } else {
       setFollowing(false);
     }
-  }, [props.route.params.uid, props.following, props.currentUser, props.posts]);
+  }, []);
 
   const onFollow = async () => {
     const followingCollectionRef = collection(db, "following");
@@ -90,6 +90,12 @@ function Profile(props) {
     const userFollowingCollectionRef = collection(userdocRef, "userFollowing");
     const docRef = doc(userFollowingCollectionRef, props.route.params.uid);
     await setDoc(docRef, {});
+    await updateDoc(doc(db, "users", props.route.params.uid), {
+      followersCount: increment(1),
+    });
+    await updateDoc(doc(db, "users", auth.currentUser.uid), {
+      followingCount: increment(1),
+    });
     props.sendNotification(
       user.notificationToken,
       "New Follower",
@@ -103,6 +109,12 @@ function Profile(props) {
     const userFollowingCollectionRef = collection(userdocRef, "userFollowing");
     const docRef = doc(userFollowingCollectionRef, props.route.params.uid);
     await deleteDoc(docRef);
+    await updateDoc(doc(db, "users", props.route.params.uid), {
+      followersCount: increment(-1),
+    });
+    await updateDoc(doc(db, "users", auth.currentUser.uid), {
+      followingCount: increment(-1),
+    });
   };
 
   if (loading) {
@@ -134,6 +146,7 @@ function Profile(props) {
       </View>
     );
   }
+
   return (
     <ScrollView
       style={[container.container, utils.backgroundWhite]}
@@ -203,6 +216,7 @@ function Profile(props) {
             </View>
           </View>
         </View>
+
         <View>
           <Text style={text.bold}>{user.name}</Text>
           <Text style={[text.profileDescription, utils.marginBottom]}>
@@ -259,38 +273,33 @@ function Profile(props) {
           )}
         </View>
       </View>
-
       <View style={[utils.borderTopGray]}>
-        <ScrollView horizontal={true}>
-          <FlatList
-            numColumns={3}
-            horizontal={false}
-            data={userPosts}
-            style={{}}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={[container.containerImage, utils.borderWhite]}
-                onPress={() =>
-                  props.navigation.navigate("Post", { item, user })
-                }
-              >
-                {item.type == 0 ? (
-                  <CachedImage
-                    cacheKey={item.id}
-                    style={container.image}
-                    source={{ uri: item.downloadURLStill }}
-                  />
-                ) : (
-                  <CachedImage
-                    cacheKey={item.id}
-                    style={container.image}
-                    source={{ uri: item.downloadURL }}
-                  />
-                )}
-              </TouchableOpacity>
-            )}
-          />
-        </ScrollView>
+        <FlatList
+          numColumns={3}
+          horizontal={false}
+          data={userPosts}
+          style={{}}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={[container.containerImage, utils.borderWhite]}
+              onPress={() => props.navigation.navigate("Post", { item, user })}
+            >
+              {item.type == 0 ? (
+                <CachedImage
+                  cacheKey={item.id}
+                  style={container.image}
+                  source={{ uri: item.downloadURLStill }}
+                />
+              ) : (
+                <CachedImage
+                  cacheKey={item.id}
+                  style={container.image}
+                  source={{ uri: item.downloadURL }}
+                />
+              )}
+            </TouchableOpacity>
+          )}
+        />
       </View>
     </ScrollView>
   );
