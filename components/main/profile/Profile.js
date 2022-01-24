@@ -203,7 +203,6 @@ function Profile(props) {
             </View>
           </View>
         </View>
-
         <View>
           <Text style={text.bold}>{user.name}</Text>
           <Text style={[text.profileDescription, utils.marginBottom]}>
