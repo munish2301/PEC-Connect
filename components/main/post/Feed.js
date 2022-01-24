@@ -14,7 +14,7 @@ import {
 import { container, utils } from "../../styles";
 import Post from "./Post";
 import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "../../../firebaseConfig";
+import { firebaseConfig } from "../../../firebase_config/firebaseConfig";
 import { getAuth } from "firebase/auth";
 
 const firebaseApp = initializeApp(firebaseConfig);

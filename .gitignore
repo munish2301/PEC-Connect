@@ -1,5 +1,5 @@
 node_modules/
-firebaseConfig.js
+firebase_config/
 .expo/
 dist/
 npm-debug.*
