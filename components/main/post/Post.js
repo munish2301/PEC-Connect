@@ -31,7 +31,7 @@ import {
   getDocs,
   getDoc,
   deleteDoc,
-  FieldValue,
+  increment,
   orderBy,
   onSnapshot,
   updateDoc,
@@ -60,7 +60,7 @@ function Post(props) {
   useEffect(async () => {
     if (props.route.params.notification != undefined) {
       const usersCollectionRef = collection(db, "users");
-      const userDocRef = doc(usersCollectionRef, props.route.params.user);
+      const userDocRef = doc(usersCollectionRef, props.route.params.user.uid);
       const snapshot = await getDoc(userDocRef);
       if (snapshot.exists) {
         let user = snapshot.data();
@@ -69,9 +69,12 @@ function Post(props) {
         setUser(user);
       }
       const postsCollectionRef = collection(db, "posts");
-      const userRef = doc(postsCollectionRef, props.route.params.user);
+      const userRef = doc(postsCollectionRef, props.route.params.user.uid);
       const userPostsCollectionRef = collection(userRef, "userPosts");
-      const postDocRef = doc(userPostsCollectionRef, props.route.params.item);
+      const postDocRef = doc(
+        userPostsCollectionRef,
+        props.route.params.item.id
+      );
       const querySnapshot = await getDoc(postDocRef);
       if (querySnapshot.exists) {
         let post = querySnapshot.data();
@@ -91,9 +94,12 @@ function Post(props) {
       });
     } else {
       const postsCollectionRef = collection(db, "posts");
-      const userRef = doc(postsCollectionRef, props.route.params.user);
+      const userRef = doc(postsCollectionRef, props.route.params.user.uid);
       const userPostsCollectionRef = collection(userRef, "userPosts");
-      const postDocRef = doc(userPostsCollectionRef, props.route.params.item);
+      const postDocRef = doc(
+        userPostsCollectionRef,
+        props.route.params.item.id
+      );
       const likesCollectionRef = collection(postDocRef, "likes");
       const authUserDocRef = doc(likesCollectionRef, auth.currentUser.uid);
       onSnapshot(authUserDocRef, (snapshot) => {
@@ -141,6 +147,9 @@ function Post(props) {
     const likesCollectionRef = collection(postDocRef, "likes");
     const authUserDocRef = doc(likesCollectionRef, auth.currentUser.uid);
     await setDoc(authUserDocRef, {});
+    await updateDoc(postDocRef, {
+      likesCount: increment(1),
+    });
     props.sendNotification(
       user.notificationToken,
       "New Like",
@@ -158,6 +167,9 @@ function Post(props) {
     const likesCollectionRef = collection(postDocRef, "likes");
     const authUserDocRef = doc(likesCollectionRef, auth.currentUser.uid);
     await deleteDoc(authUserDocRef);
+    await updateDoc(postDocRef, {
+      likesCount: increment(-1),
+    });
   };
   if (!exists && loaded) {
     return (

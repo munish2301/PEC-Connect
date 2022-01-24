@@ -45,7 +45,7 @@ function Save(props) {
   const [caption, setCaption] = useState("");
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(false);
-  const [data, setData] = useState("");
+  const [data, setData] = useState([]);
   const [keyword, setKeyword] = useState("");
 
   useLayoutEffect(() => {

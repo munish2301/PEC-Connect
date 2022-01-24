@@ -25,6 +25,8 @@ import {
   getDocs,
   getDoc,
   orderBy,
+  increment,
+  updateDoc,
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
@@ -99,7 +101,9 @@ function Comment(props) {
       creation: serverTimestamp(),
     });
     setRefresh(true);
-
+    await updateDoc(postDocRef, {
+      commentsCount: increment(1),
+    });
     const usersCollectionRef = collection(db, "users");
     const userDocRef = doc(usersCollectionRef, props.route.params.uid);
     const snapshot = await getDoc(userDocRef);
