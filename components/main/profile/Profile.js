@@ -15,7 +15,7 @@ import { sendNotification } from "../../../redux/actions/index";
 import { container, text, utils } from "../../styles";
 import CachedImage from "../random/CachedImage";
 import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "../../../firebaseConfig";
+import { firebaseConfig } from "../../../firebase_config/firebaseConfig";
 import {
   getFirestore,
   collection,

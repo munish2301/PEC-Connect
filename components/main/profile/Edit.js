@@ -15,7 +15,7 @@ import { connect } from "react-redux";
 // import { updateUserFeedPosts } from "../../../redux/actions/index";
 import { container, form, navbar, text, utils } from "../../styles";
 import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "../../../firebaseConfig";
+import { firebaseConfig } from "../../../firebase_config/firebaseConfig";
 import { getFirestore, collection, doc, updateDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import {

@@ -11,7 +11,7 @@ import {
   USER_STATE_CHANGE,
 } from "../constants/index";
 import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "../../firebaseConfig";
+import { firebaseConfig } from "../../firebase_config/firebaseConfig";
 import {
   getFirestore,
   collection,
