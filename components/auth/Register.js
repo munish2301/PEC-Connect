@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Text, TextInput, View } from "react-native";
 import { Snackbar } from "react-native-paper";
 import { container, form } from "../styles";
-import { firebaseConfig } from "../../firebaseConfig";
+import { firebaseConfig } from "../../firebase_config/firebaseConfig";
 import { initializeApp } from "firebase/app";
 import {
   doc,
