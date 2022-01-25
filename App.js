@@ -25,7 +25,7 @@ import { container } from "./components/styles";
 import rootReducer from "./redux/reducers";
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { firebaseConfig } from "./firebaseConfig";
+import { firebaseConfig } from "./firebase_config/firebaseConfig";
 import { useState, useEffect } from "react";
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
@@ -116,7 +116,7 @@ export default function App(props) {
                 case "Feed":
                 default: {
                   return {
-                    headerTitle: "Instagram",
+                    headerTitle: "PEC-Connect",
                   };
                 }
               }

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Text, TextInput, View } from "react-native";
 import { container, form } from "../styles";
-import { firebaseConfig } from "../../firebaseConfig";
+import { firebaseConfig } from "../../firebase_config/firebaseConfig";
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
