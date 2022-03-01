@@ -39,7 +39,7 @@ function Edit(props) {
 
   const onLogout = async () => {
     auth.signOut();
-    Updates.reloadAsync();
+    // Updates.reloadAsync();
   };
 
   useEffect(() => {

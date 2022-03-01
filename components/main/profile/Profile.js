@@ -14,23 +14,7 @@ import { sendNotification } from "../../../redux/actions/index";
 import { container, text, utils } from "../../styles";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../../../firebase_config/firebaseConfig";
-import {
-  getFirestore,
-  collection,
-  query,
-  increment,
-  doc,
-  where,
-  setDoc,
-  addDoc,
-  getDocs,
-  getDoc,
-  deleteDoc,
-  FieldValue,
-  orderBy,
-  onSnapshot,
-  updateDoc,
-} from "firebase/firestore";
+import { getFirestore, collection, doc, getDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -126,7 +110,7 @@ function Profile(props) {
             <View style={[container.horizontal]}>
               <TouchableOpacity
                 style={[utils.buttonOutlined, container.container]}
-                title="Follow"
+                title="Chat"
                 onPress={() => props.navigation.navigate("Chat", { user })}
               >
                 <Text style={[text.bold, text.center]}>Message</Text>
