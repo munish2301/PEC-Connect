@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { Button, Text, TextInput, View } from "react-native";
+import { Button, TextInput, View } from "react-native";
 import { Snackbar } from "react-native-paper";
 import { container, form } from "../styles";
 import { firebaseConfig } from "../../firebase_config/firebaseConfig";
 import { initializeApp } from "firebase/app";
+import RadioButtonRN from "radio-buttons-react-native";
+import * as Updates from "expo-updates";
 import {
   doc,
   getFirestore,
@@ -24,8 +26,12 @@ export default function Register(props) {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
+  const [type, setType] = useState("");
   const [isValid, setIsValid] = useState(true);
-
+  const onLogout = async () => {
+    auth.signOut();
+    Updates.reloadAsync();
+  };
   const onRegister = async () => {
     if (
       name.length == 0 ||
@@ -58,14 +64,69 @@ export default function Register(props) {
             if (snapshot.exist) {
               return;
             }
-            await setDoc(doc(db, "users", auth.currentUser.uid), {
-              name: name,
-              email: email,
-              username: username,
-              image: "default",
-              followingCount: 0,
-              followersCount: 0,
-            });
+            if (type == "Student") {
+              await setDoc(doc(db, "users", auth.currentUser.uid), {
+                name: name,
+                email: email,
+                username: username,
+                image: "default",
+                type: "Student",
+                branch: "",
+                summary: "",
+                year_of_study: "",
+                sid: "",
+                mobile_number: "",
+                academic_proficiency: "",
+                org_of_internship: "",
+                org_of_placement: "",
+                technical_skills: "",
+                interests: [],
+                achievements: "",
+              });
+            } else if (type == "Faculty") {
+              await setDoc(doc(db, "users", auth.currentUser.uid), {
+                name: name,
+                email: email,
+                username: username,
+                image: "default",
+                type: "Faculty",
+                department: "",
+                summary: "",
+                designation: "",
+                eid: "",
+                mobile_number: "",
+                technical_skills: "",
+                interests: [],
+              });
+            } else if (type == "Secretary") {
+              await setDoc(doc(db, "users", auth.currentUser.uid), {
+                name: name,
+                email: email,
+                username: username,
+                image: "default",
+                type: "Secretary",
+                summary: "",
+                department: "",
+                technical_club_cultural_club_nss_ncc_sports: "",
+                designation: "",
+                sid: "",
+                mobile_number: "",
+                interests: [],
+              });
+            } else {
+              await setDoc(doc(db, "users", auth.currentUser.uid), {
+                name: name,
+                email: email,
+                username: username,
+                image: "default",
+                type: "Webmaster",
+                eid: "",
+                summary: "",
+                designation: "",
+                mobile_number: "",
+                interests: [],
+              });
+            }
           })
           .catch(() => {
             setIsValid({
@@ -84,7 +145,20 @@ export default function Register(props) {
       });
     }
   };
-
+  const data = [
+    {
+      label: "Faculty",
+    },
+    {
+      label: "Student",
+    },
+    {
+      label: "Secretary",
+    },
+    {
+      label: "Webmaster",
+    },
+  ];
   return (
     <View style={container.center}>
       <View style={container.formCenter}>
@@ -119,19 +193,30 @@ export default function Register(props) {
           secureTextEntry={true}
           onChangeText={(password) => setPassword(password)}
         />
-
+        <RadioButtonRN
+          data={data}
+          selectedBtn={(e) => {
+            setType(e.label);
+          }}
+        />
+        <View
+          style={{
+            height: 10,
+          }}
+        />
         <Button
           style={form.button}
           onPress={() => onRegister()}
           title="Register"
         />
+        <View
+          style={{
+            height: 10,
+          }}
+        />
+        <Button style={form.button} title="Logout" onPress={() => onLogout()} />
       </View>
 
-      <View style={form.bottomButton}>
-        <Text onPress={() => props.navigation.navigate("Login")}>
-          Already have an account? SignIn.
-        </Text>
-      </View>
       <Snackbar
         visible={isValid.boolSnack}
         duration={2000}
