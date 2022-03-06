@@ -14,6 +14,7 @@ import { connect } from "react-redux";
 // import { bindActionCreators } from "redux";
 // import { updateUserFeedPosts } from "../../../redux/actions/index";
 import { container, form, navbar, text, utils } from "../../styles";
+import Icon from "react-native-vector-icons/Ionicons";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../../../firebase_config/firebaseConfig";
 import { getFirestore, collection, doc, updateDoc } from "firebase/firestore";
@@ -24,6 +25,7 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
+import { useTheme } from "react-native-paper";
 
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
@@ -36,10 +38,10 @@ function Edit(props) {
   const [image, setImage] = useState(props.currentUser.image);
   const [imageChanged, setImageChanged] = useState(false);
   const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
-
+  const { colors } = useTheme();
   const onLogout = async () => {
     auth.signOut();
-    // Updates.reloadAsync();
+    Updates.reloadAsync();
   };
 
   useEffect(() => {
@@ -53,16 +55,15 @@ function Edit(props) {
   useLayoutEffect(() => {
     props.navigation.setOptions({
       headerRight: () => (
-        <Feather
-          style={navbar.image}
-          name="check"
-          size={24}
-          color="green"
-          onPress={() => {
-            console.log({ name, description });
-            Save();
-          }}
-        />
+        <View style={{ marginRight: 10 }}>
+          <Icon.Button
+            name="ios-log-out"
+            size={25}
+            backgroundColor="#FFFFFF"
+            color={colors.text}
+            onPress={() => onLogout()}
+          />
+        </View>
       ),
     });
   }, [props.navigation, name, description, image, imageChanged]);
@@ -170,7 +171,34 @@ function Edit(props) {
           setDescription(description);
         }}
       />
-      <Button title="Logout" onPress={() => onLogout()} />
+      <TextInput
+        value={description}
+        style={[form.textInput]}
+        placeholderTextColor={"#e8e8e8"}
+        placeholder="Description"
+        onChangeText={(description) => {
+          setDescription(description);
+        }}
+      />
+      <TextInput
+        value={description}
+        style={[form.textInput]}
+        placeholderTextColor={"#e8e8e8"}
+        placeholder="Description"
+        onChangeText={(description) => {
+          setDescription(description);
+        }}
+      />
+      <TextInput
+        value={description}
+        style={[form.textInput]}
+        placeholderTextColor={"#e8e8e8"}
+        placeholder="Description"
+        onChangeText={(description) => {
+          setDescription(description);
+        }}
+      />
+      <Button title="Apply Changes" onPress={() => Save()} />
     </View>
   );
 }

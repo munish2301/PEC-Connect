@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Text, TextInput, View } from "react-native";
+import { Button, Text, TextInput, View, Image } from "react-native";
 import { container, form } from "../styles";
 import { firebaseConfig } from "../../firebase_config/firebaseConfig";
 import { initializeApp } from "firebase/app";
@@ -15,10 +15,27 @@ export default function Login(props) {
   const onSignUp = async () => {
     await signInWithEmailAndPassword(auth, email, password);
   };
-
+  const logo = require("../../assets/logo.png");
   return (
     <View style={container.center}>
       <View style={container.formCenter}>
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            paddingBottom: 20,
+          }}
+        >
+          <Image
+            style={{
+              height: 50,
+              width: 90,
+              alignSelf: "center",
+            }}
+            source={logo}
+          />
+        </View>
         <TextInput
           style={form.textInput}
           placeholder="email"

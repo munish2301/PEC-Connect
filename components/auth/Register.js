@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, TextInput, View } from "react-native";
+import { Button, TextInput, View, ScrollView } from "react-native";
 import { Snackbar } from "react-native-paper";
 import { container, form } from "../styles";
 import { firebaseConfig } from "../../firebase_config/firebaseConfig";
@@ -160,72 +160,68 @@ export default function Register(props) {
     },
   ];
   return (
-    <View style={container.center}>
-      <View style={container.formCenter}>
-        <TextInput
-          style={form.textInput}
-          placeholder="Username"
-          value={username}
-          keyboardType="twitter"
-          onChangeText={(username) =>
-            setUsername(
-              username
-                .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "")
-                .replace(/\s+/g, "")
-                .replace(/[^a-z0-9]/gi, "")
-            )
-          }
-        />
-        <TextInput
-          style={form.textInput}
-          placeholder="name"
-          onChangeText={(name) => setName(name)}
-        />
-        <TextInput
-          style={form.textInput}
-          placeholder="email"
-          onChangeText={(email) => setEmail(email)}
-        />
-        <TextInput
-          style={form.textInput}
-          placeholder="password"
-          secureTextEntry={true}
-          onChangeText={(password) => setPassword(password)}
-        />
-        <RadioButtonRN
-          data={data}
-          selectedBtn={(e) => {
-            setType(e.label);
-          }}
-        />
-        <View
-          style={{
-            height: 10,
-          }}
-        />
-        <Button
-          style={form.button}
-          onPress={() => onRegister()}
-          title="Register"
-        />
-        <View
-          style={{
-            height: 10,
-          }}
-        />
-        <Button style={form.button} title="Logout" onPress={() => onLogout()} />
-      </View>
+    <ScrollView>
+      <View style={container.center}>
+        <View style={container.formCenter}>
+          <TextInput
+            style={form.textInput}
+            placeholder="Username"
+            value={username}
+            keyboardType="twitter"
+            onChangeText={(username) =>
+              setUsername(
+                username
+                  .normalize("NFD")
+                  .replace(/[\u0300-\u036f]/g, "")
+                  .replace(/\s+/g, "")
+                  .replace(/[^a-z0-9]/gi, "")
+              )
+            }
+          />
+          <TextInput
+            style={form.textInput}
+            placeholder="name"
+            onChangeText={(name) => setName(name)}
+          />
+          <TextInput
+            style={form.textInput}
+            placeholder="email"
+            onChangeText={(email) => setEmail(email)}
+          />
+          <TextInput
+            style={form.textInput}
+            placeholder="password"
+            secureTextEntry={true}
+            onChangeText={(password) => setPassword(password)}
+          />
+          <RadioButtonRN
+            data={data}
+            selectedBtn={(e) => {
+              setType(e.label);
+            }}
+          />
+          <View
+            style={{
+              height: 10,
+            }}
+          />
+          <Button
+            style={form.button}
+            onPress={() => onRegister()}
+            title="Register"
+          />
+        </View>
 
-      <Snackbar
-        visible={isValid.boolSnack}
-        duration={2000}
-        onDismiss={() => {
-          setIsValid({ boolSnack: false });
-        }}
-      >
-        {isValid.message}
-      </Snackbar>
-    </View>
+        <Snackbar
+          visible={isValid.boolSnack}
+          duration={2000}
+          onDismiss={() => {
+            setIsValid({ boolSnack: false });
+          }}
+        >
+          {isValid.message}
+        </Snackbar>
+      </View>
+    </ScrollView>
   );
 }

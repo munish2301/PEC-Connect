@@ -10,6 +10,8 @@ import { View, Image, LogBox } from "react-native";
 import { Provider } from "react-redux";
 import { applyMiddleware, createStore } from "redux";
 import thunk from "redux-thunk";
+import * as Updates from "expo-updates";
+import { useTheme, Avatar } from "react-native-paper";
 import LoginScreen from "./components/auth/Login";
 import RegisterScreen from "./components/auth/Register";
 import MainScreen from "./components/Main";
@@ -19,8 +21,11 @@ import ChatListScreen from "./components/main/chat/List";
 import CommentScreen from "./components/main/post/Comment";
 import PostScreen from "./components/main/post/Post";
 import EditScreen from "./components/main/profile/Edit";
+import SearchScreen from "./components/main/profile/Search";
 import ProfileScreen from "./components/main/profile/Profile";
 import BlockedScreen from "./components/main/random/Blocked";
+import Icon from "react-native-vector-icons/Ionicons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { container } from "./components/styles";
 import rootReducer from "./redux/reducers";
 import { initializeApp } from "firebase/app";
@@ -42,11 +47,15 @@ const auth = getAuth(firebaseApp);
 const db = getFirestore(firebaseApp);
 const logo = require("./assets/logo.png");
 const Stack = createStackNavigator();
-
+const onLogout = async () => {
+  auth.signOut();
+  Updates.reloadAsync();
+};
 export default function App(props) {
   const [loaded, setloaded] = useState(false);
   const [loggedIn, setloggedIn] = useState(false);
   const [user, setUser] = useState({});
+  const { colors } = useTheme();
   let userDocRef = null;
   useEffect(() => {
     onAuthStateChanged(auth, (USER) => {
@@ -90,12 +99,6 @@ export default function App(props) {
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Login">
           <Stack.Screen
-            name="Register"
-            component={RegisterScreen}
-            navigation={props.navigation}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
             name="Login"
             navigation={props.navigation}
             component={LoginScreen}
@@ -113,7 +116,22 @@ export default function App(props) {
             name="Register"
             component={RegisterScreen}
             navigation={props.navigation}
-            options={{ headerShown: false }}
+            options={({}) => {
+              return {
+                title: "Register New User",
+                headerRight: () => (
+                  <View style={{ marginRight: 10 }}>
+                    <Icon.Button
+                      name="ios-log-out"
+                      size={25}
+                      backgroundColor="#FFFFFF"
+                      color={colors.text}
+                      onPress={() => onLogout()}
+                    />
+                  </View>
+                ),
+              };
+            }}
           />
         </Stack.Navigator>
       </NavigationContainer>
@@ -128,7 +146,7 @@ export default function App(props) {
               name="Main"
               component={MainScreen}
               navigation={props.navigation}
-              options={({ route }) => {
+              options={({ navigation, route }) => {
                 const routeName = getFocusedRouteNameFromRoute(route) ?? "Feed";
 
                 switch (routeName) {
@@ -140,22 +158,61 @@ export default function App(props) {
                   case "chat": {
                     return {
                       headerTitle: "Chat",
+                      headerRight: () => (
+                        <View style={{ marginRight: 10 }}>
+                          <Icon.Button
+                            name="ios-search"
+                            size={25}
+                            backgroundColor="#FFFFFF"
+                            color={colors.text}
+                            onPress={() => navigation.navigate("Search")}
+                          />
+                        </View>
+                      ),
                     };
                   }
                   case "Profile": {
                     return {
                       headerTitle: "Profile",
-                    };
-                  }
-                  case "Search": {
-                    return {
-                      headerTitle: "Search",
+                      headerLeft: () => (
+                        <View style={{ marginLeft: 10 }}>
+                          <Icon.Button
+                            name="ios-log-out"
+                            size={25}
+                            color={colors.text}
+                            backgroundColor="#FFFFFF"
+                            onPress={() => onLogout()}
+                          />
+                        </View>
+                      ),
+                      headerRight: () => (
+                        <View style={{ marginRight: 10 }}>
+                          <MaterialCommunityIcons.Button
+                            name="account-edit"
+                            size={25}
+                            backgroundColor="#FFFFFF"
+                            color={colors.text}
+                            onPress={() => navigation.navigate("Edit")}
+                          />
+                        </View>
+                      ),
                     };
                   }
                   case "Feed":
                   default: {
                     return {
                       headerTitle: "PEC-Connect",
+                      headerRight: () => (
+                        <View style={{ marginRight: 10 }}>
+                          <Icon.Button
+                            name="ios-search"
+                            size={25}
+                            backgroundColor="#FFFFFF"
+                            color={colors.text}
+                            onPress={() => navigation.navigate("Search")}
+                          />
+                        </View>
+                      ),
                     };
                   }
                 }
@@ -175,6 +232,28 @@ export default function App(props) {
             />
             <Stack.Screen
               key={Date.now()}
+              name="Search"
+              component={SearchScreen}
+              navigation={props.navigation}
+              options={({ navigation }) => {
+                return {
+                  title: "Search",
+                  headerRight: () => (
+                    <View style={{ marginRight: 10 }}>
+                      <Icon.Button
+                        name="ios-chatbox"
+                        size={25}
+                        backgroundColor="#FFFFFF"
+                        color={colors.text}
+                        onPress={() => navigation.navigate("ChatList")}
+                      />
+                    </View>
+                  ),
+                };
+              }}
+            />
+            <Stack.Screen
+              key={Date.now()}
               name="Post"
               component={PostScreen}
               navigation={props.navigation}
@@ -190,6 +269,22 @@ export default function App(props) {
               name="ChatList"
               component={ChatListScreen}
               navigation={props.navigation}
+              options={({ navigation }) => {
+                return {
+                  title: "Chat",
+                  headerRight: () => (
+                    <View style={{ marginRight: 10 }}>
+                      <Icon.Button
+                        name="ios-search"
+                        size={25}
+                        backgroundColor="#FFFFFF"
+                        color={colors.text}
+                        onPress={() => navigation.navigate("Search")}
+                      />
+                    </View>
+                  ),
+                };
+              }}
             />
             <Stack.Screen
               key={Date.now()}
@@ -202,6 +297,33 @@ export default function App(props) {
               name="Profile"
               component={ProfileScreen}
               navigation={props.navigation}
+              options={({ navigation }) => {
+                return {
+                  headerTitle: "Profile",
+                  headerLeft: () => (
+                    <View style={{ marginLeft: 10 }}>
+                      <Icon.Button
+                        name="ios-log-out"
+                        size={25}
+                        color={colors.text}
+                        backgroundColor="#FFFFFF"
+                        onPress={() => onLogout()}
+                      />
+                    </View>
+                  ),
+                  headerRight: () => (
+                    <View style={{ marginRight: 10 }}>
+                      <MaterialCommunityIcons.Button
+                        name="account-edit"
+                        size={25}
+                        backgroundColor="#FFFFFF"
+                        color={colors.text}
+                        onPress={() => navigation.navigate("Edit")}
+                      />
+                    </View>
+                  ),
+                };
+              }}
             />
             <Stack.Screen
               key={Date.now()}

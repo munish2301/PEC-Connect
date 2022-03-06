@@ -12,11 +12,7 @@ import CachedImage from "react-native-expo-cached-image";
 import { Provider } from "react-native-paper";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {
-  fetchFeedPosts,
-  fetchUserChats,
-  sendNotification,
-} from "../../../redux/actions/index";
+import { fetchFeedPosts, fetchUserChats } from "../../../redux/actions/index";
 import { container, text, utils } from "../../styles";
 import { timeDifference } from "../../utils";
 import { initializeApp } from "firebase/app";
@@ -51,20 +47,9 @@ function Chat(props) {
   const [flatList, setFlatList] = useState(null);
   const [initialFetch, setInitialFetch] = useState(false);
 
-  useEffect(async () => {
-    if (props.route.params.notification) {
-      const usersCollectionRef = collection(db, "users");
-      const userDocRef = doc(usersCollectionRef, props.route.params.user);
-      const snapshot = await getDoc(userDocRef);
-      if (snapshot.exists) {
-        let user = snapshot.data();
-        user.uid = snapshot.id;
-        setUser(user);
-      }
-    } else {
-      setUser(props.route.params.user);
-    }
-  }, [props.route.params.notification, props.route.params.user]);
+  useEffect(() => {
+    setUser(props.route.params.user);
+  }, [props.route.params.user]);
 
   useEffect(async () => {
     if (user == null) {
@@ -173,10 +158,6 @@ function Chat(props) {
       lastMessageTimestamp: serverTimestamp(),
       [chat.users[0]]: false,
       [chat.users[1]]: false,
-    });
-    props.sendNotification(user.notificationToken, "New Message", textToSend, {
-      type: "chat",
-      user: auth.currentUser.uid,
     });
   };
 
@@ -324,9 +305,6 @@ const mapStateToProps = (store) => ({
   feed: store.usersState.feed,
 });
 const mapDispatchProps = (dispatch) =>
-  bindActionCreators(
-    { fetchUserChats, sendNotification, fetchFeedPosts },
-    dispatch
-  );
+  bindActionCreators({ fetchUserChats, fetchFeedPosts }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchProps)(Chat);
