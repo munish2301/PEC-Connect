@@ -1,9 +1,7 @@
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
-import * as Notifications from "expo-notifications";
 import { getAuth } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { reload } from "../redux/actions/index";
@@ -12,76 +10,18 @@ import ChatListScreen from "./main/chat/List";
 import FeedScreen from "./main/post/Feed";
 import ProfileScreen from "./main/profile/Profile";
 import SearchScreen from "./main/profile/Search";
+import Icon from "react-native-vector-icons/Ionicons";
 
 const Tab = createMaterialBottomTabNavigator();
 const auth = getAuth();
 
 function Main(props) {
   const [unreadChats, setUnreadChats] = useState(false);
-  const [lastNot, setLastNot] = useState(false);
-
-  const lastNotificationResponse = Notifications.useLastNotificationResponse();
-
-  if (lastNotificationResponse != null && lastNotificationResponse != lastNot) {
-    setLastNot(lastNotificationResponse);
-    switch (lastNotificationResponse.notification.request.content.data.type) {
-      case 0:
-        props.navigation.navigate("Post", {
-          item: lastNotificationResponse.notification.request.content.data
-            .postId,
-          user: lastNotificationResponse.notification.request.content.data.user,
-          notification: true,
-        });
-        break;
-      case 1:
-        props.navigation.navigate("Chat", {
-          user: lastNotificationResponse.notification.request.content.data.user,
-          notification: true,
-        });
-        break;
-      case 2:
-        props.navigation.navigate("ProfileOther", {
-          uid: lastNotificationResponse.notification.request.content.data.user,
-          username: undefined,
-          notification: true,
-        });
-        break;
-    }
-  }
   useEffect(() => {
     props.reload();
-    Notifications.addNotificationResponseReceivedListener((notification) => {
-      switch (notification.notification.request.content.data.type) {
-        case "post":
-          props.navigation.navigate("Post", {
-            item: notification.notification.request.content.data.postId,
-            user: notification.notification.request.content.data.user,
-            notification: true,
-          });
-          break;
-        case "chat":
-          props.navigation.navigate("Chat", {
-            user: notification.notification.request.content.data.user,
-            notification: true,
-          });
-          break;
-        case "profile":
-          props.navigation.navigate("ProfileOther", {
-            uid: notification.notification.request.content.data.user,
-            username: undefined,
-            notification: true,
-          });
-          break;
-      }
-    });
   }, []);
 
   useEffect(() => {
-    if (props.currentUser != null) {
-      if (props.currentUser.banned) {
-        props.navigation.navigate("Blocked");
-      }
-    }
     setUnreadChats(false);
     for (let i = 0; i < props.chats.length; i++) {
       if (!props.chats[i][auth.currentUser.uid]) {
@@ -89,11 +29,10 @@ function Main(props) {
       }
     }
   }, [props.currentUser, props.chats]);
-
+  // console.log(props.currentUser);
   if (props.currentUser == null) {
     return <View></View>;
   }
-
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
       <Tab.Navigator
@@ -109,38 +48,45 @@ function Main(props) {
         barStyle={{ backgroundColor: "#ffffff" }}
       >
         <Tab.Screen
+          name="Profile"
+          component={ProfileScreen}
+          navigation={props.navigation}
+          listeners={({ navigation }) => ({
+            tabPress: (event) => {
+              event.preventDefault();
+              navigation.navigate("Profile", { uid: auth.currentUser.uid });
+            },
+          })}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <Icon name="ios-person" color={color} size={26} />
+            ),
+          }}
+        />
+        <Tab.Screen
           key={Date.now()}
           name="Feed"
           component={FeedScreen}
           options={{
             tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="home" color={color} size={26} />
+              <Icon name="ios-home" color={color} size={26} />
             ),
           }}
         />
-        <Tab.Screen
-          key={Date.now()}
-          name="Search"
-          component={SearchScreen}
-          navigation={props.navigation}
-          options={{
-            tabBarLabel: "Seach",
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="magnify" color={color} size={26} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          key={Date.now()}
-          name="Camera"
-          component={CameraScreen}
-          navigation={props.navigation}
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="camera" color={color} size={26} />
-            ),
-          }}
-        />
+        {props.currentUser.type !== "Student" &&
+          props.currentUser.type !== "Faculty" && (
+            <Tab.Screen
+              key={Date.now()}
+              name="Camera"
+              component={CameraScreen}
+              navigation={props.navigation}
+              options={{
+                tabBarIcon: ({ color, size }) => (
+                  <Icon name="ios-add-circle" color={color} size={26} />
+                ),
+              }}
+            />
+          )}
         <Tab.Screen
           key={Date.now()}
           name="chat"
@@ -163,29 +109,8 @@ function Main(props) {
                   ></View>
                 ) : null}
                 <View />
-
-                <MaterialCommunityIcons name="chat" color={color} size={26} />
+                <Icon name="ios-chatbox" color={color} size={26} />
               </View>
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Profile"
-          component={ProfileScreen}
-          navigation={props.navigation}
-          listeners={({ navigation }) => ({
-            tabPress: (event) => {
-              event.preventDefault();
-              navigation.navigate("Profile", { uid: auth.currentUser.uid });
-            },
-          })}
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons
-                name="account-circle"
-                color={color}
-                size={26}
-              />
             ),
           }}
         />

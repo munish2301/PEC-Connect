@@ -255,33 +255,6 @@ export function fetchUsersFollowingLikes(uid, postId) {
   };
 }
 
-export function queryUsersByUsername(username) {
-  return (dispatch, getState) => {
-    return new Promise(async (resolve, reject) => {
-      if (username.length == 0) {
-        resolve([]);
-      }
-      const usersCollectionRef = collection(db, "users");
-      const q = query(
-        usersCollectionRef,
-        where("username", ">=", username),
-        limit(10)
-      );
-      try {
-        const snapshot = await getDocs(q);
-        let users = snapshot.docs.map((doc) => {
-          const data = doc.data();
-          const id = doc.id;
-          return { id, ...data };
-        });
-        resolve(users);
-      } catch (err) {
-        reject();
-      }
-    });
-  };
-}
-
 export function deletePost(item) {
   return (dispatch, getState) => {
     return new Promise(async (resolve, reject) => {

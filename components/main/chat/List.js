@@ -139,11 +139,6 @@ function Chat(props) {
             <Image
               style={utils.profileImageSmall}
               source={{ uri: props.route.params.post.downloadURL }}
-              style={{
-                aspectRatio: 1 / 1,
-                backgroundColor: "black",
-                height: 80,
-              }}
             />
           ) : (
             <CachedImage
