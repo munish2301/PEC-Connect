@@ -11,6 +11,7 @@ import {
   View,
 } from "react-native";
 import { connect } from "react-redux";
+import { ScrollView } from "react-native-gesture-handler";
 // import { bindActionCreators } from "redux";
 // import { updateUserFeedPosts } from "../../../redux/actions/index";
 import { container, form, navbar, text, utils } from "../../styles";
@@ -33,8 +34,19 @@ const auth = getAuth(firebaseApp);
 const storage = getStorage(firebaseApp);
 
 function Edit(props) {
+  const [branch, setBranch] = useState("");
+  const [summary, setSummary] = useState("");
+  const [year_of_study, setYear] = useState("");
+  const [sid, setSID] = useState("");
+  const [mobile_number, setMobileNumber] = useState("");
+  const [academic_proficiency, setAcadProf] = useState("");
+  const [org_of_internship, setInternOrg] = useState("");
+  const [org_of_placement, setPlacementOrg] = useState("");
+  const [technical_skills, setTechnicalSkills] = useState("");
+  const [achievements, setAchievements] = useState("");
+  const [interests, setInterests] = useState([]);
+  const [interest, setInterest] = useState("");
   const [name, setName] = useState(props.currentUser.name);
-  const [description, setDescription] = useState("");
   const [image, setImage] = useState(props.currentUser.image);
   const [imageChanged, setImageChanged] = useState(false);
   const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
@@ -46,8 +58,38 @@ function Edit(props) {
 
   useEffect(() => {
     (async () => {
-      if (props.currentUser.description !== undefined) {
-        setDescription(props.currentUser.description);
+      if (props.currentUser.branch !== undefined) {
+        setBranch(props.currentUser.branch);
+      }
+      if (props.currentUser.summary !== undefined) {
+        setSummary(props.currentUser.summary);
+      }
+      if (props.currentUser.year_of_study !== undefined) {
+        setYear(props.currentUser.year_of_study);
+      }
+      if (props.currentUser.sid !== undefined) {
+        setSID(props.currentUser.sid);
+      }
+      if (props.currentUser.mobile_number !== undefined) {
+        setMobileNumber(props.currentUser.mobile_number);
+      }
+      if (props.currentUser.academic_proficiency !== undefined) {
+        setAcadProf(props.currentUser.academic_proficiency);
+      }
+      if (props.currentUser.org_of_internship !== undefined) {
+        setInternOrg(props.currentUser.org_of_internship);
+      }
+      if (props.currentUser.org_of_placement !== undefined) {
+        setPlacementOrg(props.currentUser.org_of_placement);
+      }
+      if (props.currentUser.technical_skills !== undefined) {
+        setTechnicalSkills(props.currentUser.technical_skills);
+      }
+      if (props.currentUser.achievements !== undefined) {
+        setAchievements(props.currentUser.achievements);
+      }
+      if (props.currentUser.interests !== undefined) {
+        setInterests(props.currentUser.interests);
       }
     })();
   }, []);
@@ -66,8 +108,23 @@ function Edit(props) {
         </View>
       ),
     });
-  }, [props.navigation, name, description, image, imageChanged]);
-
+  }, [
+    props.navigation,
+    name,
+    branch,
+    year_of_study,
+    mobile_number,
+    sid,
+    summary,
+    academic_proficiency,
+    achievements,
+    interest,
+    technical_skills,
+    org_of_internship,
+    org_of_placement,
+    image,
+    imageChanged,
+  ]);
   const pickImage = async () => {
     if (true) {
       let result = await ImagePicker.launchImageLibraryAsync({
@@ -102,8 +159,18 @@ function Edit(props) {
           const usersCollectionRef = collection(db, "users");
           const docRef = doc(usersCollectionRef, auth.currentUser.uid);
           await updateDoc(docRef, {
-            name,
-            description,
+            name: name,
+            branch: branch,
+            year_of_study: year_of_study,
+            mobile_number: mobile_number,
+            sid: sid,
+            summary: summary,
+            academic_proficiency: academic_proficiency,
+            achievements: achievements,
+            interests: [...interests, interest],
+            technical_skills: technical_skills,
+            org_of_internship: org_of_internship,
+            org_of_placement: org_of_placement,
             image: snapshot,
           });
           //  props.updateUserFeedPosts();
@@ -118,8 +185,18 @@ function Edit(props) {
       task.on("state_changed", taskProgress, taskError, taskCompleted);
     } else {
       saveData({
-        name,
-        description,
+        name: name,
+        branch: branch,
+        year_of_study: year_of_study,
+        mobile_number: mobile_number,
+        sid: sid,
+        summary: summary,
+        academic_proficiency: academic_proficiency,
+        achievements: achievements,
+        interests: [...interests, interest],
+        technical_skills: technical_skills,
+        org_of_internship: org_of_internship,
+        org_of_placement: org_of_placement,
       });
     }
   };
@@ -155,50 +232,115 @@ function Edit(props) {
         )}
         <Text style={text.changePhoto}>Change Profile Photo</Text>
       </TouchableOpacity>
-
-      <TextInput
-        value={name}
-        style={form.textInput}
-        placeholder="Name"
-        onChangeText={(name) => setName(name)}
-      />
-      <TextInput
-        value={description}
-        style={[form.textInput]}
-        placeholderTextColor={"#e8e8e8"}
-        placeholder="Description"
-        onChangeText={(description) => {
-          setDescription(description);
-        }}
-      />
-      <TextInput
-        value={description}
-        style={[form.textInput]}
-        placeholderTextColor={"#e8e8e8"}
-        placeholder="Description"
-        onChangeText={(description) => {
-          setDescription(description);
-        }}
-      />
-      <TextInput
-        value={description}
-        style={[form.textInput]}
-        placeholderTextColor={"#e8e8e8"}
-        placeholder="Description"
-        onChangeText={(description) => {
-          setDescription(description);
-        }}
-      />
-      <TextInput
-        value={description}
-        style={[form.textInput]}
-        placeholderTextColor={"#e8e8e8"}
-        placeholder="Description"
-        onChangeText={(description) => {
-          setDescription(description);
-        }}
-      />
-      <Button title="Apply Changes" onPress={() => Save()} />
+      <ScrollView>
+        <TextInput
+          value={name}
+          style={form.textInput}
+          placeholder="Name"
+          placeholderTextColor={"#e8e8e8"}
+          onChangeText={(name) => setName(name)}
+        />
+        <TextInput
+          value={branch}
+          style={[form.textInput]}
+          placeholderTextColor={"#e8e8e8"}
+          placeholder="Branch"
+          onChangeText={(branch) => {
+            setBranch(branch);
+          }}
+        />
+        <TextInput
+          value={summary}
+          style={[form.textInput]}
+          placeholderTextColor={"#e8e8e8"}
+          placeholder="About"
+          onChangeText={(about) => {
+            setSummary(about);
+          }}
+        />
+        <TextInput
+          value={org_of_internship}
+          style={[form.textInput]}
+          placeholderTextColor={"#e8e8e8"}
+          placeholder="Internship Organization"
+          onChangeText={(intern) => {
+            setInternOrg(intern);
+          }}
+        />
+        <TextInput
+          value={org_of_placement}
+          style={[form.textInput]}
+          placeholderTextColor={"#e8e8e8"}
+          placeholder="Placement Organization"
+          onChangeText={(place) => {
+            setPlacementOrg(place);
+          }}
+        />
+        <TextInput
+          value={sid}
+          style={[form.textInput]}
+          placeholderTextColor={"#e8e8e8"}
+          placeholder="Student ID"
+          onChangeText={(sid) => {
+            setSID(sid);
+          }}
+        />
+        <TextInput
+          value={year_of_study}
+          style={[form.textInput]}
+          placeholderTextColor={"#e8e8e8"}
+          placeholder="Year"
+          onChangeText={(year) => {
+            setYear(year);
+          }}
+        />
+        <TextInput
+          value={mobile_number}
+          style={[form.textInput]}
+          placeholderTextColor={"#e8e8e8"}
+          placeholder="Mobile Number"
+          onChangeText={(mobile_number) => {
+            setMobileNumber(mobile_number);
+          }}
+        />
+        <TextInput
+          value={academic_proficiency}
+          style={[form.textInput]}
+          placeholderTextColor={"#e8e8e8"}
+          placeholder="Academic Proficiency"
+          onChangeText={(prof) => {
+            setAcadProf(prof);
+          }}
+        />
+        <TextInput
+          value={achievements}
+          style={[form.textInput]}
+          placeholderTextColor={"#e8e8e8"}
+          placeholder="Achievements"
+          onChangeText={(achievements) => {
+            setAchievements(achievements);
+          }}
+        />
+        <TextInput
+          value={interest}
+          style={[form.textInput]}
+          placeholderTextColor={"#e8e8e8"}
+          placeholder="Add Interest"
+          onChangeText={(interest) => {
+            setInterest(interest);
+          }}
+        />
+        <TextInput
+          value={technical_skills}
+          style={[form.textInput]}
+          placeholderTextColor={"#e8e8e8"}
+          placeholder="Technical Skills"
+          onChangeText={(technical_skills) => {
+            setTechnicalSkills(technical_skills);
+          }}
+        />
+        <Button title="Apply Changes" onPress={() => Save()} />
+      </ScrollView>
     </View>
   );
 }

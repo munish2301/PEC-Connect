@@ -32,7 +32,10 @@ function Profile(props) {
     const { currentUser, posts } = props;
 
     if (props.route.params.uid === auth.currentUser.uid) {
-      setUser(currentUser);
+      const usersCollectionRef = collection(db, "users");
+      const docRef = doc(usersCollectionRef, auth.currentUser.uid);
+      const snapshot = await getDoc(docRef);
+      setUser({ uid: auth.currentUser.uid, ...snapshot.data() });
       setLoading(false);
     } else {
       const usersCollectionRef = collection(db, "users");
@@ -60,7 +63,7 @@ function Profile(props) {
       }
       setLoading(false);
     }
-  }, [props.route.params.uid]);
+  }, [props.route.params.uid, props.currentUser]);
 
   if (loading) {
     return (
@@ -91,7 +94,6 @@ function Profile(props) {
       </View>
     );
   }
-
   return (
     <ScrollView>
       <SafeAreaView style={styles.container}>
@@ -114,11 +116,12 @@ function Profile(props) {
             )}
 
             <View style={{ marginLeft: 20 }}>
+              <Caption style={styles.caption}>Hi</Caption>
               <Title
                 style={[
                   styles.title,
                   {
-                    marginTop: 15,
+                    marginTop: 5,
                     marginBottom: 5,
                   },
                 ]}
@@ -129,43 +132,58 @@ function Profile(props) {
             </View>
           </View>
         </View>
-
-        <View style={styles.userInfoSection}>
-          <View style={styles.row}>
-            <Icon name="phone" color="#777777" size={20} />
-            <Text style={{ color: "#777777", marginLeft: 20 }}>
-              {user.mobile_number}
-            </Text>
-          </View>
-          <View style={styles.row}>
-            <Icon name="email" color="#777777" size={20} />
-            <Text style={{ color: "#777777", marginLeft: 20 }}>
-              {user.email}
-            </Text>
-          </View>
-        </View>
-        <View style={styles.infoBoxWrapper}>
-          <View
-            style={[
-              styles.infoBox,
-              {
-                borderRightColor: "#dddddd",
-                borderRightWidth: 1,
-              },
-            ]}
-          >
-            <Title>₹140.50</Title>
-            <Caption>Wallet</Caption>
-          </View>
-          <View style={styles.infoBox}>
-            <Title>12</Title>
-            <Caption>Orders</Caption>
-          </View>
-        </View>
         <View style={styles.menuWrapper}>
           <View style={styles.menuItem}>
-            <Icon name="heart-outline" color="#FF6347" size={25} />
-            <Text style={styles.menuItemText}>Your Favorites</Text>
+            <Text style={styles.menuItemText}>About :</Text>
+            <Text style={styles.menuitemText}>{user.summary}</Text>
+          </View>
+          <View style={styles.menuItem}>
+            <Text style={styles.menuItemText}>Student ID :</Text>
+            <Text style={styles.menuitemText}>{user.sid}</Text>
+          </View>
+          <View style={styles.menuItem}>
+            <Text style={styles.menuItemText}>Email :</Text>
+            <Text style={styles.menuitemText}>{user.email}</Text>
+          </View>
+          <View style={styles.menuItem}>
+            <Text style={styles.menuItemText}>Mobile Number :</Text>
+            <Text style={styles.menuitemText}>{user.mobile_number}</Text>
+          </View>
+          <View style={styles.menuItem}>
+            <Text style={styles.menuItemText}>Branch :</Text>
+            <Text style={styles.menuitemText}>{user.branch}</Text>
+          </View>
+          <View style={styles.menuItem}>
+            <Text style={styles.menuItemText}>Year :</Text>
+            <Text style={styles.menuitemText}>{user.year_of_study}</Text>
+          </View>
+          <View style={styles.menuItem}>
+            <Text style={styles.menuItemText}>Intern at :</Text>
+            <Text style={styles.menuitemText}>{user.org_of_internship}</Text>
+          </View>
+          <View style={styles.menuItem}>
+            <Text style={styles.menuItemText}>Placed at :</Text>
+            <Text style={styles.menuitemText}>{user.org_of_placement}</Text>
+          </View>
+          <View style={styles.menuItem}>
+            <Text style={styles.menuItemText}>Academic Proficiency :</Text>
+            <Text style={styles.menuitemText}>{user.academic_proficiency}</Text>
+          </View>
+          <View style={styles.menuItem}>
+            <Text style={styles.menuItemText}>Technical Skills :</Text>
+            <Text style={styles.menuitemText}>{user.technical_skills}</Text>
+          </View>
+          <View style={styles.menuItem}>
+            <Text style={styles.menuItemText}>Achievements :</Text>
+            <Text style={styles.menuitemText}>{user.achievements}</Text>
+          </View>
+          <View style={styles.menuItem}>
+            <Text style={styles.menuItemText}>Interests :</Text>
+            {user.interests.map((e, index) => (
+              <Text key={index} style={styles.interestText}>
+                {e}
+              </Text>
+            ))}
           </View>
         </View>
       </SafeAreaView>
@@ -188,7 +206,6 @@ const styles = StyleSheet.create({
   },
   userInfoSection: {
     paddingHorizontal: 30,
-    marginBottom: 25,
   },
   title: {
     fontSize: 24,
@@ -203,29 +220,28 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginBottom: 10,
   },
-  infoBoxWrapper: {
-    borderBottomColor: "#dddddd",
-    borderBottomWidth: 1,
-    borderTopColor: "#dddddd",
-    borderTopWidth: 1,
-    flexDirection: "row",
-    height: 100,
-  },
-  infoBox: {
-    width: "50%",
-    alignItems: "center",
-    justifyContent: "center",
-  },
   menuWrapper: {
-    marginTop: 10,
+    marginTop: 20,
   },
   menuItem: {
     flexDirection: "row",
-    paddingVertical: 15,
+    paddingVertical: 5,
     paddingHorizontal: 30,
   },
   menuItemText: {
     color: "#777777",
+    marginLeft: 20,
+    fontWeight: "600",
+    fontSize: 16,
+    lineHeight: 26,
+  },
+  menuitemText: {
+    marginLeft: 20,
+    fontWeight: "600",
+    fontSize: 16,
+    lineHeight: 26,
+  },
+  interestText: {
     marginLeft: 20,
     fontWeight: "600",
     fontSize: 16,
