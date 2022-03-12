@@ -116,7 +116,9 @@ function Profile(props) {
             )}
 
             <View style={{ marginLeft: 20 }}>
-              <Caption style={styles.caption}>Hi</Caption>
+              {props.route.params.uid === auth.currentUser.uid && (
+                <Caption style={styles.caption}>Hi</Caption>
+              )}
               <Title
                 style={[
                   styles.title,
@@ -132,60 +134,180 @@ function Profile(props) {
             </View>
           </View>
         </View>
-        <View style={styles.menuWrapper}>
-          <View style={styles.menuItem}>
-            <Text style={styles.menuItemText}>About :</Text>
-            <Text style={styles.menuitemText}>{user.summary}</Text>
-          </View>
-          <View style={styles.menuItem}>
-            <Text style={styles.menuItemText}>Student ID :</Text>
-            <Text style={styles.menuitemText}>{user.sid}</Text>
-          </View>
-          <View style={styles.menuItem}>
-            <Text style={styles.menuItemText}>Email :</Text>
-            <Text style={styles.menuitemText}>{user.email}</Text>
-          </View>
-          <View style={styles.menuItem}>
-            <Text style={styles.menuItemText}>Mobile Number :</Text>
-            <Text style={styles.menuitemText}>{user.mobile_number}</Text>
-          </View>
-          <View style={styles.menuItem}>
-            <Text style={styles.menuItemText}>Branch :</Text>
-            <Text style={styles.menuitemText}>{user.branch}</Text>
-          </View>
-          <View style={styles.menuItem}>
-            <Text style={styles.menuItemText}>Year :</Text>
-            <Text style={styles.menuitemText}>{user.year_of_study}</Text>
-          </View>
-          <View style={styles.menuItem}>
-            <Text style={styles.menuItemText}>Intern at :</Text>
-            <Text style={styles.menuitemText}>{user.org_of_internship}</Text>
-          </View>
-          <View style={styles.menuItem}>
-            <Text style={styles.menuItemText}>Placed at :</Text>
-            <Text style={styles.menuitemText}>{user.org_of_placement}</Text>
-          </View>
-          <View style={styles.menuItem}>
-            <Text style={styles.menuItemText}>Academic Proficiency :</Text>
-            <Text style={styles.menuitemText}>{user.academic_proficiency}</Text>
-          </View>
-          <View style={styles.menuItem}>
-            <Text style={styles.menuItemText}>Technical Skills :</Text>
-            <Text style={styles.menuitemText}>{user.technical_skills}</Text>
-          </View>
-          <View style={styles.menuItem}>
-            <Text style={styles.menuItemText}>Achievements :</Text>
-            <Text style={styles.menuitemText}>{user.achievements}</Text>
-          </View>
-          <View style={styles.menuItem}>
-            <Text style={styles.menuItemText}>Interests :</Text>
-            {user.interests.map((e, index) => (
-              <Text key={index} style={styles.interestText}>
-                {e}
+        {user.type === "Student" && (
+          <View style={styles.menuWrapper}>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>About :</Text>
+              <Text style={styles.menuitemText}>{user.summary}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Student ID :</Text>
+              <Text style={styles.menuitemText}>{user.sid}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Email :</Text>
+              <Text style={styles.menuitemText}>{user.email}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Mobile Number :</Text>
+              <Text style={styles.menuitemText}>{user.mobile_number}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Branch :</Text>
+              <Text style={styles.menuitemText}>{user.branch}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Year :</Text>
+              <Text style={styles.menuitemText}>{user.year_of_study}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Intern at :</Text>
+              <Text style={styles.menuitemText}>{user.org_of_internship}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Placed at :</Text>
+              <Text style={styles.menuitemText}>{user.org_of_placement}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Academic Proficiency :</Text>
+              <Text style={styles.menuitemText}>
+                {user.academic_proficiency}
               </Text>
-            ))}
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Technical Skills :</Text>
+              <Text style={styles.menuitemText}>{user.technical_skills}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Achievements :</Text>
+              <Text style={styles.menuitemText}>{user.achievements}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Interests :</Text>
+              {user.interests.map((e, index) => (
+                <Text key={index} style={styles.interestText}>
+                  {e}
+                </Text>
+              ))}
+            </View>
           </View>
-        </View>
+        )}
+        {user.type === "Faculty" && (
+          <View style={styles.menuWrapper}>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>About :</Text>
+              <Text style={styles.menuitemText}>{user.summary}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Employee ID :</Text>
+              <Text style={styles.menuitemText}>{user.eid}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Email :</Text>
+              <Text style={styles.menuitemText}>{user.email}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Mobile Number :</Text>
+              <Text style={styles.menuitemText}>{user.mobile_number}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Department :</Text>
+              <Text style={styles.menuitemText}>{user.department}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Designation :</Text>
+              <Text style={styles.menuitemText}>{user.designation}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Technical Skills :</Text>
+              <Text style={styles.menuitemText}>{user.technical_skills}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Interests :</Text>
+              {user.interests.map((e, index) => (
+                <Text key={index} style={styles.interestText}>
+                  {e}
+                </Text>
+              ))}
+            </View>
+          </View>
+        )}
+        {user.type === "Secretary" && (
+          <View style={styles.menuWrapper}>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>About :</Text>
+              <Text style={styles.menuitemText}>{user.summary}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Student ID :</Text>
+              <Text style={styles.menuitemText}>{user.sid}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Email :</Text>
+              <Text style={styles.menuitemText}>{user.email}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Mobile Number :</Text>
+              <Text style={styles.menuitemText}>{user.mobile_number}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>
+                Society/Club/NSS/NCC/Sports :
+              </Text>
+              <Text style={styles.menuitemText}>
+                {user.technical_club_cultural_club_nss_ncc_sports}
+              </Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Department :</Text>
+              <Text style={styles.menuitemText}>{user.department}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Designation :</Text>
+              <Text style={styles.menuitemText}>{user.designation}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Interests :</Text>
+              {user.interests.map((e, index) => (
+                <Text key={index} style={styles.interestText}>
+                  {e}
+                </Text>
+              ))}
+            </View>
+          </View>
+        )}
+        {user.type === "Webmaster" && (
+          <View style={styles.menuWrapper}>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>About :</Text>
+              <Text style={styles.menuitemText}>{user.summary}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Employee ID :</Text>
+              <Text style={styles.menuitemText}>{user.eid}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Email :</Text>
+              <Text style={styles.menuitemText}>{user.email}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Mobile Number :</Text>
+              <Text style={styles.menuitemText}>{user.mobile_number}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Designation :</Text>
+              <Text style={styles.menuitemText}>{user.designation}</Text>
+            </View>
+            <View style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Interests :</Text>
+              {user.interests.map((e, index) => (
+                <Text key={index} style={styles.interestText}>
+                  {e}
+                </Text>
+              ))}
+            </View>
+          </View>
+        )}
       </SafeAreaView>
     </ScrollView>
   );
