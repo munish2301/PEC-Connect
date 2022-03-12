@@ -18,7 +18,19 @@ const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 
 function Search(props) {
-  const KEYS_TO_FILTERS = ["username", "name", "org_of_internship"];
+  const KEYS_TO_FILTERS = [
+    "username",
+    "name",
+    "org_of_internship",
+    "org_of_placement",
+    "branch",
+    "year_of_study",
+    "academic_proficiency",
+    "technical_skills",
+    "department",
+    "designation",
+    "technical_club_cultural_club_nss_ncc_sports",
+  ];
   const [searchTerm, setSearchTerm] = useState("");
   const [users, setUsers] = useState([]);
   const usersCollectionRef = collection(db, "users");
