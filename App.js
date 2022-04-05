@@ -28,7 +28,6 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { firebaseConfig } from "./firebase_config/firebaseConfig";
 import { useState, useEffect } from "react";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
-
 const store = createStore(rootReducer, applyMiddleware(thunk));
 LogBox.ignoreLogs(["Setting a timer"]);
 const _console = _.clone(console);
