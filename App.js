@@ -42,6 +42,7 @@ console.warn = (message) => {
     _console.warn(message);
   }
 };
+
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
 const db = getFirestore(firebaseApp);
