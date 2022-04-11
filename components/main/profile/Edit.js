@@ -8,6 +8,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  StyleSheet,
   View,
 } from "react-native";
 import { connect } from "react-redux";
@@ -15,11 +16,11 @@ import { ScrollView } from "react-native-gesture-handler";
 // import { bindActionCreators } from "redux";
 // import { updateUserFeedPosts } from "../../../redux/actions/index";
 import { container, form, navbar, text, utils } from "../../styles";
-import Icon from "react-native-vector-icons/Ionicons";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../../../firebase_config/firebaseConfig";
 import { getFirestore, collection, doc, updateDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import Icon from "react-native-vector-icons/Ionicons";
 import {
   getStorage,
   ref,
@@ -108,7 +109,7 @@ function Edit(props) {
         setClub(props.currentUser.club);
       }
     })();
-  }, []);
+  }, [props.currentUser.interests]);
 
   useLayoutEffect(() => {
     props.navigation.setOptions({
@@ -161,7 +162,21 @@ function Edit(props) {
       }
     }
   };
-
+  const deleteInterest = async (index) => {
+    const usersCollectionRef = collection(db, "users");
+    const docRef = doc(usersCollectionRef, auth.currentUser.uid);
+    await updateDoc(docRef, {
+      interests: [...interests.slice(0, index), ...interests.slice(index + 1)],
+    });
+  };
+  const addInterest = async (interest) => {
+    const usersCollectionRef = collection(db, "users");
+    const docRef = doc(usersCollectionRef, auth.currentUser.uid);
+    await updateDoc(docRef, {
+      interests: interest !== "" ? [...interests, interest] : [...interests],
+    });
+    setInterest("");
+  };
   const Save = async () => {
     if (imageChanged) {
       const uri = image;
@@ -421,15 +436,6 @@ function Edit(props) {
             }}
           />
           <TextInput
-            value={interest}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="Add Interest"
-            onChangeText={(interest) => {
-              setInterest(interest);
-            }}
-          />
-          <TextInput
             value={technical_skills}
             style={[form.textInput]}
             placeholderTextColor={"#e8e8e8"}
@@ -438,6 +444,37 @@ function Edit(props) {
               setTechnicalSkills(technical_skills);
             }}
           />
+          <View style={{ flexDirection: "row" }}>
+            <TextInput
+              value={interest}
+              style={{ ...form.textInput, marginRight: 10, flex: 1 }}
+              placeholderTextColor={"#e8e8e8"}
+              placeholder="Add Interest"
+              onChangeText={(interest) => {
+                setInterest(interest);
+              }}
+            />
+            <TouchableOpacity onPress={() => addInterest(interest)}>
+              <Icon
+                name="add"
+                style={{ marginTop: 8 }}
+                size={30}
+                color={"grey"}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.menuItem}>
+            {interests.map((e, index) => (
+              <View key={index} style={{ flexDirection: "row" }}>
+                <Text key={index} style={styles.interestText}>
+                  {e}
+                </Text>
+                <TouchableOpacity onPress={() => deleteInterest(index)}>
+                  <Icon name="close" color="grey" size={26} />
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
           <Button title="Apply Changes" onPress={() => Save()} />
         </ScrollView>
       )}
@@ -496,15 +533,6 @@ function Edit(props) {
             }}
           />
           <TextInput
-            value={interest}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="Add Interest"
-            onChangeText={(interest) => {
-              setInterest(interest);
-            }}
-          />
-          <TextInput
             value={technical_skills}
             style={[form.textInput]}
             placeholderTextColor={"#e8e8e8"}
@@ -513,6 +541,37 @@ function Edit(props) {
               setTechnicalSkills(technical_skills);
             }}
           />
+          <View style={{ flexDirection: "row" }}>
+            <TextInput
+              value={interest}
+              style={{ ...form.textInput, marginRight: 10, flex: 1 }}
+              placeholderTextColor={"#e8e8e8"}
+              placeholder="Add Interest"
+              onChangeText={(interest) => {
+                setInterest(interest);
+              }}
+            />
+            <TouchableOpacity onPress={() => addInterest(interest)}>
+              <Icon
+                name="add"
+                style={{ marginTop: 8 }}
+                size={30}
+                color={"grey"}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.menuItem}>
+            {interests.map((e, index) => (
+              <View key={index} style={{ flexDirection: "row" }}>
+                <Text key={index} style={styles.interestText}>
+                  {e}
+                </Text>
+                <TouchableOpacity onPress={() => deleteInterest(index)}>
+                  <Icon name="close" color="grey" size={26} />
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
           <Button title="Apply Changes" onPress={() => Save()} />
         </ScrollView>
       )}
@@ -579,15 +638,37 @@ function Edit(props) {
               setMobileNumber(mobile_number);
             }}
           />
-          <TextInput
-            value={interest}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="Add Interest"
-            onChangeText={(interest) => {
-              setInterest(interest);
-            }}
-          />
+          <View style={{ flexDirection: "row" }}>
+            <TextInput
+              value={interest}
+              style={{ ...form.textInput, marginRight: 10, flex: 1 }}
+              placeholderTextColor={"#e8e8e8"}
+              placeholder="Add Interest"
+              onChangeText={(interest) => {
+                setInterest(interest);
+              }}
+            />
+            <TouchableOpacity onPress={() => addInterest(interest)}>
+              <Icon
+                name="add"
+                style={{ marginTop: 8 }}
+                size={30}
+                color={"grey"}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.menuItem}>
+            {interests.map((e, index) => (
+              <View key={index} style={{ flexDirection: "row" }}>
+                <Text key={index} style={styles.interestText}>
+                  {e}
+                </Text>
+                <TouchableOpacity onPress={() => deleteInterest(index)}>
+                  <Icon name="close" color="grey" size={26} />
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
           <Button title="Apply Changes" onPress={() => Save()} />
         </ScrollView>
       )}
@@ -636,15 +717,37 @@ function Edit(props) {
               setMobileNumber(mobile_number);
             }}
           />
-          <TextInput
-            value={interest}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="Add Interest"
-            onChangeText={(interest) => {
-              setInterest(interest);
-            }}
-          />
+          <View style={{ flexDirection: "row" }}>
+            <TextInput
+              value={interest}
+              style={{ ...form.textInput, marginRight: 10, flex: 1 }}
+              placeholderTextColor={"#e8e8e8"}
+              placeholder="Add Interest"
+              onChangeText={(interest) => {
+                setInterest(interest);
+              }}
+            />
+            <TouchableOpacity onPress={() => addInterest(interest)}>
+              <Icon
+                name="add"
+                style={{ marginTop: 8 }}
+                size={30}
+                color={"grey"}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.menuItem}>
+            {interests.map((e, index) => (
+              <View key={index} style={{ flexDirection: "row" }}>
+                <Text key={index} style={styles.interestText}>
+                  {e}
+                </Text>
+                <TouchableOpacity onPress={() => deleteInterest(index)}>
+                  <Icon name="close" color="grey" size={26} />
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
           <Button title="Apply Changes" onPress={() => Save()} />
         </ScrollView>
       )}
@@ -660,3 +763,23 @@ const mapStateToProps = (store) => ({
 //   bindActionCreators({ updateUserFeedPosts }, dispatch);
 
 export default connect(mapStateToProps, null)(Edit);
+
+const styles = StyleSheet.create({
+  menuItem: {
+    paddingVertical: 5,
+  },
+  interestText: {
+    marginLeft: 0,
+    marginBottom: 5,
+    fontWeight: "600",
+    fontSize: 16,
+    lineHeight: 26,
+    borderColor: "grey",
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingLeft: 10,
+    paddingBottom: 5,
+    paddingRight: 10,
+    paddingTop: 5,
+  },
+});
