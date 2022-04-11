@@ -98,13 +98,30 @@ export default function Register(props) {
                 technical_skills: "",
                 interests: [],
               });
-            } else if (type == "Secretary") {
+            } else if (type == "Secretary (Tech.)") {
               await setDoc(doc(db, "users", auth.currentUser.uid), {
                 name: name,
                 email: email,
                 username: username,
                 image: "default",
                 type: "Secretary",
+                tag: "Technical",
+                summary: "",
+                department: "",
+                technical_club_cultural_club_nss_ncc_sports: "",
+                designation: "",
+                sid: "",
+                mobile_number: "",
+                interests: [],
+              });
+            } else if (type == "Secretary (Cult.)") {
+              await setDoc(doc(db, "users", auth.currentUser.uid), {
+                name: name,
+                email: email,
+                username: username,
+                image: "default",
+                type: "Secretary",
+                tag: "Cultural",
                 summary: "",
                 department: "",
                 technical_club_cultural_club_nss_ncc_sports: "",
@@ -153,7 +170,10 @@ export default function Register(props) {
       label: "Student",
     },
     {
-      label: "Secretary",
+      label: "Secretary (Tech.)",
+    },
+    {
+      label: "Secretary (Cult.)",
     },
     {
       label: "Webmaster",

@@ -9,7 +9,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { Avatar, Title, useTheme, Caption, Text } from "react-native-paper";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import Icon from "react-native-vector-icons/Ionicons";
 import { ScrollView } from "react-native-gesture-handler";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -17,7 +17,13 @@ import { sendNotification } from "../../../redux/actions/index";
 import { container, text, utils } from "../../styles";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../../../firebase_config/firebaseConfig";
-import { getFirestore, collection, doc, getDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  doc,
+  getDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -29,8 +35,6 @@ function Profile(props) {
   const [loading, setLoading] = useState(true);
   const { colors } = useTheme();
   useEffect(async () => {
-    const { currentUser, posts } = props;
-
     if (props.route.params.uid === auth.currentUser.uid) {
       const usersCollectionRef = collection(db, "users");
       const docRef = doc(usersCollectionRef, auth.currentUser.uid);
@@ -51,7 +55,7 @@ function Profile(props) {
           headerRight: ({}) => (
             <View style={{ marginRight: 10 }}>
               <Icon.Button
-                name="chat"
+                name="chatbox"
                 size={25}
                 backgroundColor="#FFFFFF"
                 color={colors.text}
@@ -94,27 +98,40 @@ function Profile(props) {
       </View>
     );
   }
+
+  const deleteInterest = async (index) => {
+    const usersCollectionRef = collection(db, "users");
+    const docRef = doc(usersCollectionRef, auth.currentUser.uid);
+    await updateDoc(docRef, {
+      interests: [
+        ...user.interests.slice(0, index),
+        ...user.interests.slice(index + 1),
+      ],
+    });
+  };
+  const clickingImage = () => {};
   return (
     <ScrollView>
       <SafeAreaView style={styles.container}>
         <View style={styles.userInfoSection}>
           <View style={{ flexDirection: "row", marginTop: 15 }}>
-            {user.image == "default" ? (
-              <FontAwesome5
-                style={[utils.profileImageBig, utils.marginBottomSmall]}
-                name="user-circle"
-                size={80}
-                color="black"
-              />
-            ) : (
-              <Avatar.Image
-                source={{
-                  uri: user.image,
-                }}
-                size={80}
-              />
-            )}
-
+            <TouchableOpacity onPress={() => clickingImage()}>
+              {user.image == "default" ? (
+                <FontAwesome5
+                  style={[utils.profileImageBig, utils.marginBottomSmall]}
+                  name="user-circle"
+                  size={80}
+                  color="black"
+                />
+              ) : (
+                <Avatar.Image
+                  source={{
+                    uri: user.image,
+                  }}
+                  size={80}
+                />
+              )}
+            </TouchableOpacity>
             <View style={{ marginLeft: 20 }}>
               {props.route.params.uid === auth.currentUser.uid && (
                 <Caption style={styles.caption}>Hi</Caption>
@@ -137,175 +154,211 @@ function Profile(props) {
         {user.type === "Student" && (
           <View style={styles.menuWrapper}>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>About :</Text>
+              <Text style={styles.menuItemText}>About</Text>
               <Text style={styles.menuitemText}>{user.summary}</Text>
             </View>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Student ID :</Text>
+              <Text style={styles.menuItemText}>Student ID</Text>
               <Text style={styles.menuitemText}>{user.sid}</Text>
             </View>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Email :</Text>
+              <Text style={styles.menuItemText}>Email</Text>
               <Text style={styles.menuitemText}>{user.email}</Text>
             </View>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Mobile Number :</Text>
+              <Text style={styles.menuItemText}>Mobile Number</Text>
               <Text style={styles.menuitemText}>{user.mobile_number}</Text>
             </View>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Branch :</Text>
+              <Text style={styles.menuItemText}>Branch</Text>
               <Text style={styles.menuitemText}>{user.branch}</Text>
             </View>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Year :</Text>
+              <Text style={styles.menuItemText}>Year</Text>
               <Text style={styles.menuitemText}>{user.year_of_study}</Text>
             </View>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Intern at :</Text>
+              <Text style={styles.menuItemText}>Intern at</Text>
               <Text style={styles.menuitemText}>{user.org_of_internship}</Text>
             </View>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Placed at :</Text>
+              <Text style={styles.menuItemText}>Placed at</Text>
               <Text style={styles.menuitemText}>{user.org_of_placement}</Text>
             </View>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Academic Proficiency :</Text>
+              <Text style={styles.menuItemText}>Academic Proficiency</Text>
               <Text style={styles.menuitemText}>
                 {user.academic_proficiency}
               </Text>
             </View>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Technical Skills :</Text>
+              <Text style={styles.menuItemText}>Technical Skills</Text>
               <Text style={styles.menuitemText}>{user.technical_skills}</Text>
             </View>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Achievements :</Text>
+              <Text style={styles.menuItemText}>Achievements</Text>
               <Text style={styles.menuitemText}>{user.achievements}</Text>
             </View>
-            <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Interests :</Text>
-              {user.interests.map((e, index) => (
-                <Text key={index} style={styles.interestText}>
-                  {e}
-                </Text>
-              ))}
-            </View>
+            {props.route.params.uid === auth.currentUser.uid && (
+              <View style={styles.menuItem}>
+                {user.interests.length !== 0 && (
+                  <Text style={styles.menuItemText}>Interests</Text>
+                )}
+                {user.interests.map((e, index) => (
+                  <View key={index} style={{ flexDirection: "row" }}>
+                    <Text key={index} style={styles.interestText}>
+                      {e}
+                    </Text>
+                    <TouchableOpacity onPress={() => deleteInterest(index)}>
+                      <Icon name="close" color="grey" size={26} />
+                    </TouchableOpacity>
+                  </View>
+                ))}
+              </View>
+            )}
           </View>
         )}
         {user.type === "Faculty" && (
           <View style={styles.menuWrapper}>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>About :</Text>
+              <Text style={styles.menuItemText}>About</Text>
               <Text style={styles.menuitemText}>{user.summary}</Text>
             </View>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Employee ID :</Text>
+              <Text style={styles.menuItemText}>Employee ID</Text>
               <Text style={styles.menuitemText}>{user.eid}</Text>
             </View>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Email :</Text>
+              <Text style={styles.menuItemText}>Email</Text>
               <Text style={styles.menuitemText}>{user.email}</Text>
             </View>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Mobile Number :</Text>
+              <Text style={styles.menuItemText}>Mobile Number</Text>
               <Text style={styles.menuitemText}>{user.mobile_number}</Text>
             </View>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Department :</Text>
+              <Text style={styles.menuItemText}>Department</Text>
               <Text style={styles.menuitemText}>{user.department}</Text>
             </View>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Designation :</Text>
+              <Text style={styles.menuItemText}>Designation</Text>
               <Text style={styles.menuitemText}>{user.designation}</Text>
             </View>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Technical Skills :</Text>
+              <Text style={styles.menuItemText}>Technical Skills</Text>
               <Text style={styles.menuitemText}>{user.technical_skills}</Text>
             </View>
-            <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Interests :</Text>
-              {user.interests.map((e, index) => (
-                <Text key={index} style={styles.interestText}>
-                  {e}
-                </Text>
-              ))}
-            </View>
+            {props.route.params.uid === auth.currentUser.uid && (
+              <View style={styles.menuItem}>
+                {user.interests.length !== 0 && (
+                  <Text style={styles.menuItemText}>Interests</Text>
+                )}
+                {user.interests.map((e, index) => (
+                  <View key={index} style={{ flexDirection: "row" }}>
+                    <Text key={index} style={styles.interestText}>
+                      {e}
+                    </Text>
+                    <TouchableOpacity onPress={() => deleteInterest(index)}>
+                      <Icon name="close" color="grey" size={26} />
+                    </TouchableOpacity>
+                  </View>
+                ))}
+              </View>
+            )}
           </View>
         )}
         {user.type === "Secretary" && (
           <View style={styles.menuWrapper}>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>About :</Text>
+              <Text style={styles.menuItemText}>About</Text>
               <Text style={styles.menuitemText}>{user.summary}</Text>
             </View>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Student ID :</Text>
+              <Text style={styles.menuItemText}>Student ID</Text>
               <Text style={styles.menuitemText}>{user.sid}</Text>
             </View>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Email :</Text>
+              <Text style={styles.menuItemText}>Email</Text>
               <Text style={styles.menuitemText}>{user.email}</Text>
             </View>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Mobile Number :</Text>
+              <Text style={styles.menuItemText}>Mobile Number</Text>
               <Text style={styles.menuitemText}>{user.mobile_number}</Text>
             </View>
             <View style={styles.menuItem}>
               <Text style={styles.menuItemText}>
-                Society/Club/NSS/NCC/Sports :
+                Society/Club/NSS/NCC/Sports
               </Text>
               <Text style={styles.menuitemText}>
                 {user.technical_club_cultural_club_nss_ncc_sports}
               </Text>
             </View>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Department :</Text>
+              <Text style={styles.menuItemText}>Department</Text>
               <Text style={styles.menuitemText}>{user.department}</Text>
             </View>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Designation :</Text>
+              <Text style={styles.menuItemText}>Designation</Text>
               <Text style={styles.menuitemText}>{user.designation}</Text>
             </View>
-            <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Interests :</Text>
-              {user.interests.map((e, index) => (
-                <Text key={index} style={styles.interestText}>
-                  {e}
-                </Text>
-              ))}
-            </View>
+            {props.route.params.uid === auth.currentUser.uid && (
+              <View style={styles.menuItem}>
+                {user.interests.length !== 0 && (
+                  <Text style={styles.menuItemText}>Interests</Text>
+                )}
+                {user.interests.map((e, index) => (
+                  <View key={index} style={{ flexDirection: "row" }}>
+                    <Text key={index} style={styles.interestText}>
+                      {e}
+                    </Text>
+                    <TouchableOpacity onPress={() => deleteInterest(index)}>
+                      <Icon name="close" color="grey" size={26} />
+                    </TouchableOpacity>
+                  </View>
+                ))}
+              </View>
+            )}
           </View>
         )}
         {user.type === "Webmaster" && (
           <View style={styles.menuWrapper}>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>About :</Text>
+              <Text style={styles.menuItemText}>About</Text>
               <Text style={styles.menuitemText}>{user.summary}</Text>
             </View>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Employee ID :</Text>
+              <Text style={styles.menuItemText}>Employee ID</Text>
               <Text style={styles.menuitemText}>{user.eid}</Text>
             </View>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Email :</Text>
+              <Text style={styles.menuItemText}>Email</Text>
               <Text style={styles.menuitemText}>{user.email}</Text>
             </View>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Mobile Number :</Text>
+              <Text style={styles.menuItemText}>Mobile Number</Text>
               <Text style={styles.menuitemText}>{user.mobile_number}</Text>
             </View>
             <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Designation :</Text>
+              <Text style={styles.menuItemText}>Designation</Text>
               <Text style={styles.menuitemText}>{user.designation}</Text>
             </View>
-            <View style={styles.menuItem}>
-              <Text style={styles.menuItemText}>Interests :</Text>
-              {user.interests.map((e, index) => (
-                <Text key={index} style={styles.interestText}>
-                  {e}
-                </Text>
-              ))}
-            </View>
+            {props.route.params.uid === auth.currentUser.uid && (
+              <View style={styles.menuItem}>
+                {user.interests.length !== 0 && (
+                  <Text style={styles.menuItemText}>Interests</Text>
+                )}
+                {user.interests.map((e, index) => (
+                  <View key={index} style={{ flexDirection: "row" }}>
+                    <Text key={index} style={styles.interestText}>
+                      {e}
+                    </Text>
+                    <TouchableOpacity onPress={() => deleteInterest(index)}>
+                      <Icon name="close" color="grey" size={26} />
+                    </TouchableOpacity>
+                  </View>
+                ))}
+              </View>
+            )}
           </View>
         )}
       </SafeAreaView>
@@ -346,27 +399,41 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   menuItem: {
-    flexDirection: "row",
     paddingVertical: 5,
     paddingHorizontal: 30,
   },
   menuItemText: {
     color: "#777777",
-    marginLeft: 20,
+    marginLeft: 10,
     fontWeight: "600",
-    fontSize: 16,
+    fontSize: 10,
     lineHeight: 26,
   },
   menuitemText: {
     marginLeft: 20,
     fontWeight: "600",
+    borderColor: "grey",
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingLeft: 10,
+    paddingBottom: 5,
+    paddingRight: 10,
+    paddingTop: 5,
     fontSize: 16,
     lineHeight: 26,
   },
   interestText: {
     marginLeft: 20,
+    marginBottom: 5,
     fontWeight: "600",
     fontSize: 16,
     lineHeight: 26,
+    borderColor: "grey",
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingLeft: 10,
+    paddingBottom: 5,
+    paddingRight: 10,
+    paddingTop: 5,
   },
 });
