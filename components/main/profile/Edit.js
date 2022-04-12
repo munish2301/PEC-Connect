@@ -105,8 +105,11 @@ function Edit(props) {
       if (props.currentUser.eid !== undefined) {
         setEID(props.currentUser.eid);
       }
-      if (props.currentUser.club !== undefined) {
-        setClub(props.currentUser.club);
+      if (
+        props.currentUser.technical_club_cultural_club_nss_ncc_sports !==
+        undefined
+      ) {
+        setClub(props.currentUser.technical_club_cultural_club_nss_ncc_sports);
       }
     })();
   }, [props.currentUser.interests]);
