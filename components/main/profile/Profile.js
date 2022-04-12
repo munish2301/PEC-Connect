@@ -50,23 +50,10 @@ function Profile(props) {
           title: snapshot.data().username,
         });
         setUser({ uid: props.route.params.uid, ...snapshot.data() });
-        props.navigation.setOptions({
-          headerRight: ({}) => (
-            <View style={{ marginRight: 10 }}>
-              <Icon.Button
-                name="chatbox"
-                size={25}
-                backgroundColor="#FFFFFF"
-                color={colors.text}
-                onPress={() => props.navigation.navigate("Chat", { user })}
-              />
-            </View>
-          ),
-        });
       }
       setLoading(false);
     }
-  }, [props.route.params.uid, props.currentUser, user]);
+  }, [props.route.params.uid, props.currentUser]);
 
   if (loading) {
     return (
@@ -109,6 +96,21 @@ function Profile(props) {
     });
   };
   const clickingImage = () => {};
+  if (props.route.params.uid !== auth.currentUser.uid) {
+    props.navigation.setOptions({
+      headerRight: ({}) => (
+        <View style={{ marginRight: 10 }}>
+          <Icon.Button
+            name="chatbox"
+            size={25}
+            backgroundColor="#FFFFFF"
+            color={colors.text}
+            onPress={() => props.navigation.navigate("Chat", { user })}
+          />
+        </View>
+      ),
+    });
+  }
   return (
     <ScrollView>
       <SafeAreaView style={styles.container}>
