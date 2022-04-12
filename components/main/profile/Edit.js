@@ -111,7 +111,7 @@ function Edit(props) {
       if (achievements === "" && props.currentUser.achievements !== undefined) {
         setAchievements(props.currentUser.achievements);
       }
-      if (interests === [] && props.currentUser.interests !== undefined) {
+      if (interests.length === 0 && props.currentUser.interests !== undefined) {
         setInterests(props.currentUser.interests);
       }
       if (department === "" && props.currentUser.department !== undefined) {
