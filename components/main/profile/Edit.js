@@ -63,50 +63,72 @@ function Edit(props) {
 
   useEffect(() => {
     (async () => {
-      if (props.currentUser.branch !== undefined) {
+      if (branch === "" && props.currentUser.branch !== undefined) {
         setBranch(props.currentUser.branch);
       }
-      if (props.currentUser.summary !== undefined) {
+      if (summary === "" && props.currentUser.summary !== undefined) {
         setSummary(props.currentUser.summary);
       }
-      if (props.currentUser.year_of_study !== undefined) {
+      if (
+        year_of_study === "" &&
+        props.currentUser.year_of_study !== undefined
+      ) {
         setYear(props.currentUser.year_of_study);
       }
-      if (props.currentUser.sid !== undefined) {
+      if (sid === "" && props.currentUser.sid !== undefined) {
         setSID(props.currentUser.sid);
       }
-      if (props.currentUser.mobile_number !== undefined) {
+      if (
+        mobile_number === "" &&
+        props.currentUser.mobile_number !== undefined
+      ) {
         setMobileNumber(props.currentUser.mobile_number);
       }
-      if (props.currentUser.academic_proficiency !== undefined) {
+      if (
+        academic_proficiency === "" &&
+        props.currentUser.academic_proficiency !== undefined
+      ) {
         setAcadProf(props.currentUser.academic_proficiency);
       }
-      if (props.currentUser.org_of_internship !== undefined) {
+      if (
+        org_of_internship === "" &&
+        props.currentUser.org_of_internship !== undefined
+      ) {
         setInternOrg(props.currentUser.org_of_internship);
       }
-      if (props.currentUser.org_of_placement !== undefined) {
+      if (
+        org_of_placement === "" &&
+        props.currentUser.org_of_placement !== undefined
+      ) {
         setPlacementOrg(props.currentUser.org_of_placement);
       }
-      if (props.currentUser.technical_skills !== undefined) {
+      if (
+        technical_skills === "" &&
+        props.currentUser.technical_skills !== undefined
+      ) {
         setTechnicalSkills(props.currentUser.technical_skills);
       }
-      if (props.currentUser.achievements !== undefined) {
+      if (achievements === "" && props.currentUser.achievements !== undefined) {
         setAchievements(props.currentUser.achievements);
       }
-      if (props.currentUser.interests !== undefined) {
+      if (interests.length === 0 && props.currentUser.interests !== undefined) {
         setInterests(props.currentUser.interests);
       }
-      if (props.currentUser.department !== undefined) {
+      if (department === "" && props.currentUser.department !== undefined) {
         setDepartment(props.currentUser.department);
       }
-      if (props.currentUser.designation !== undefined) {
+      if (designation === "" && props.currentUser.designation !== undefined) {
         setDesignation(props.currentUser.designation);
       }
-      if (props.currentUser.eid !== undefined) {
+      if (eid === "" && props.currentUser.eid !== undefined) {
         setEID(props.currentUser.eid);
       }
-      if (props.currentUser.club !== undefined) {
-        setClub(props.currentUser.club);
+      if (
+        club === "" &&
+        props.currentUser.technical_club_cultural_club_nss_ncc_sports !==
+          undefined
+      ) {
+        setClub(props.currentUser.technical_club_cultural_club_nss_ncc_sports);
       }
     })();
   }, [props.currentUser.interests]);
@@ -175,6 +197,7 @@ function Edit(props) {
     await updateDoc(docRef, {
       interests: interest !== "" ? [...interests, interest] : [...interests],
     });
+    console.log(department);
     setInterest("");
   };
   const Save = async () => {
