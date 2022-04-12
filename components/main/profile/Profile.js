@@ -49,7 +49,6 @@ function Profile(props) {
         props.navigation.setOptions({
           title: snapshot.data().username,
         });
-
         setUser({ uid: props.route.params.uid, ...snapshot.data() });
         props.navigation.setOptions({
           headerRight: ({}) => (
@@ -67,7 +66,7 @@ function Profile(props) {
       }
       setLoading(false);
     }
-  }, [props.route.params.uid, props.currentUser]);
+  }, [props.route.params.uid, props.currentUser, user]);
 
   if (loading) {
     return (
