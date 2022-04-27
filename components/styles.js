@@ -13,15 +13,15 @@ const utils = StyleSheet.create({
     marginBottom: 10,
   },
   profileImageBig: {
-    width: 80,
-    height: 80,
-    borderRadius: 80 / 2,
+    width: 180,
+    height: 180,
+    borderRadius: 180 / 2,
   },
   profileImage: {
     marginRight: 15,
-    width: 50,
-    height: 50,
-    borderRadius: 50 / 2,
+    width: 40,
+    height: 40,
+    borderRadius: 40 / 2,
   },
   profileImageSmall: {
     marginRight: 15,

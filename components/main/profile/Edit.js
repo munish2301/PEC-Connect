@@ -355,7 +355,7 @@ function Edit(props) {
           <FontAwesome5
             style={[utils.profileImageBig, utils.marginBottomSmall]}
             name="user-circle"
-            size={80}
+            size={180}
             color="black"
           />
         ) : (
