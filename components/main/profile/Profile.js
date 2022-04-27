@@ -115,13 +115,18 @@ function Profile(props) {
     <ScrollView>
       <SafeAreaView style={styles.container}>
         <View style={styles.userInfoSection}>
-          <View style={{ flexDirection: "row", marginTop: 15 }}>
+          <View
+            style={{
+              alignItems: "center",
+              marginTop: 15,
+            }}
+          >
             <TouchableOpacity onPress={() => clickingImage()}>
               {user.image == "default" ? (
                 <FontAwesome5
                   style={[utils.profileImageBig, utils.marginBottomSmall]}
                   name="user-circle"
-                  size={80}
+                  size={180}
                   color="black"
                 />
               ) : (
@@ -129,14 +134,11 @@ function Profile(props) {
                   source={{
                     uri: user.image,
                   }}
-                  size={80}
+                  size={180}
                 />
               )}
             </TouchableOpacity>
-            <View style={{ marginLeft: 20 }}>
-              {props.route.params.uid === auth.currentUser.uid && (
-                <Caption style={styles.caption}>Hi</Caption>
-              )}
+            <View style={{ marginTop: 20, alignItems: "center" }}>
               <Title
                 style={[
                   styles.title,
@@ -148,7 +150,9 @@ function Profile(props) {
               >
                 {user.name}
               </Title>
-              <Caption style={styles.caption}>{user.username}</Caption>
+              <Caption style={{ ...styles.caption, paddingBottom: 20 }}>
+                {user.username}
+              </Caption>
             </View>
           </View>
         </View>
@@ -382,6 +386,7 @@ const styles = StyleSheet.create({
   },
   userInfoSection: {
     paddingHorizontal: 30,
+    backgroundColor: "white",
   },
   title: {
     fontSize: 24,
@@ -397,23 +402,26 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   menuWrapper: {
-    marginTop: 20,
+    marginTop: 5,
   },
   menuItem: {
     paddingVertical: 5,
     paddingHorizontal: 30,
+    paddingBottom: 5,
+    backgroundColor: "white",
+    marginBottom: 5,
   },
   menuItemText: {
     color: "#777777",
-    marginLeft: 10,
-    fontWeight: "600",
-    fontSize: 10,
+    marginLeft: 5,
+    fontWeight: "bold",
+    fontSize: 12,
     lineHeight: 26,
   },
   menuitemText: {
-    marginLeft: 20,
+    marginLeft: 10,
     fontWeight: "600",
-    borderColor: "grey",
+    borderColor: "white",
     borderWidth: 1,
     borderRadius: 5,
     paddingLeft: 10,
