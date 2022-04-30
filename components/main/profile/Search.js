@@ -9,6 +9,7 @@ import {
   Image,
 } from "react-native";
 import { container, text, utils } from "../../styles";
+import Icon from "react-native-vector-icons/Ionicons";
 import SearchInput, { createFilter } from "react-native-search-filter";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../../../firebase_config/firebaseConfig";
@@ -47,6 +48,7 @@ function Search(props) {
   } catch (err) {
     console.log(err);
   }
+  const profilelogo = require("./../../../assets/profile.png");
   const filteredUsers = users.filter(createFilter(searchTerm, KEYS_TO_FILTERS));
   return (
     <View style={styles.container}>
@@ -70,16 +72,20 @@ function Search(props) {
               key={user.id}
               style={styles.emailItem}
             >
-              <View style={utils.justifyCenter}>
-                <Text style={text.username}>{user.username}</Text>
-                <Text style={text.name}>{user.name}</Text>
+              <View style={{ flexDirection: "row" }}>
+                <View style={{ ...utils.justifyCenter }}>
+                  <Icon name="search" color="#64B5F6" size={15} />
+                </View>
+                <View style={{ ...utils.justifyCenter, marginLeft: 15 }}>
+                  <Text style={text.username}>{user.username}</Text>
+                  <Text style={text.name}>{user.name}</Text>
+                </View>
               </View>
+
               {user.image == "default" ? (
-                <FontAwesome5
+                <Image
                   style={[utils.profileImage, utils.marginBottomSmall]}
-                  name="user-circle"
-                  size={40}
-                  color="black"
+                  source={profilelogo}
                 />
               ) : (
                 <Image
@@ -112,9 +118,12 @@ const styles = StyleSheet.create({
     color: "rgba(0,0,0,0.5)",
   },
   searchInput: {
-    padding: 10,
-    margin: 5,
-    borderColor: "#CCC",
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 5,
+    paddingBottom: 5,
+    margin: 15,
+    borderColor: "#64B5F6",
     borderWidth: 1,
     borderRadius: 50,
   },

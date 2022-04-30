@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   View,
+  SafeAreaView,
 } from "react-native";
 import { connect } from "react-redux";
 import { ScrollView } from "react-native-gesture-handler";
@@ -135,17 +136,22 @@ function Edit(props) {
 
   useLayoutEffect(() => {
     props.navigation.setOptions({
+      title: "Edit Profile",
+      headerTintColor: "#fff",
       headerRight: () => (
         <View style={{ marginRight: 10 }}>
           <Icon.Button
             name="ios-log-out"
             size={25}
-            backgroundColor="#FFFFFF"
-            color={colors.text}
+            backgroundColor="#1E88E5"
+            color="#fff"
             onPress={() => onLogout()}
           />
         </View>
       ),
+      headerStyle: {
+        backgroundColor: "#1E88E5",
+      },
     });
   }, [
     props.navigation,
@@ -344,436 +350,436 @@ function Edit(props) {
     // props.updateUserFeedPosts();
     props.navigation.goBack();
   };
-
+  const profilelogo = require("./../../../assets/profile.png");
   return (
-    <View style={container.form}>
-      <TouchableOpacity
-        style={[utils.centerHorizontal, utils.marginBottom]}
-        onPress={() => pickImage()}
-      >
-        {image == "default" ? (
-          <FontAwesome5
-            style={[utils.profileImageBig, utils.marginBottomSmall]}
-            name="user-circle"
-            size={180}
-            color="black"
-          />
-        ) : (
-          <Image
-            style={[utils.profileImageBig, utils.marginBottomSmall]}
-            source={{
-              uri: image,
-            }}
-          />
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      <View style={{ ...container.form }}>
+        <TouchableOpacity
+          style={[utils.centerHorizontal, utils.marginBottom]}
+          onPress={() => pickImage()}
+        >
+          {image == "default" ? (
+            <Image
+              style={[utils.profileImageBig, utils.marginBottomSmall]}
+              source={profilelogo}
+            />
+          ) : (
+            <Image
+              style={[utils.profileImageBig, utils.marginBottomSmall]}
+              source={{
+                uri: image,
+              }}
+            />
+          )}
+          <Text style={text.changePhoto}>Change Profile Photo</Text>
+        </TouchableOpacity>
+        {props.currentUser.type == "Student" && (
+          <ScrollView>
+            <TextInput
+              value={name}
+              style={form.textInput}
+              placeholder="Name"
+              placeholderTextColor={"#e8e8e8"}
+              onChangeText={(name) => setName(name)}
+            />
+            <TextInput
+              value={branch}
+              style={[form.textInput]}
+              placeholderTextColor={"#e8e8e8"}
+              placeholder="Branch"
+              onChangeText={(branch) => {
+                setBranch(branch);
+              }}
+            />
+            <TextInput
+              value={summary}
+              style={[form.textInput]}
+              placeholderTextColor={"#e8e8e8"}
+              placeholder="About"
+              onChangeText={(about) => {
+                setSummary(about);
+              }}
+            />
+            <TextInput
+              value={org_of_internship}
+              style={[form.textInput]}
+              placeholderTextColor={"#e8e8e8"}
+              placeholder="Internship Organization"
+              onChangeText={(intern) => {
+                setInternOrg(intern);
+              }}
+            />
+            <TextInput
+              value={org_of_placement}
+              style={[form.textInput]}
+              placeholderTextColor={"#e8e8e8"}
+              placeholder="Placement Organization"
+              onChangeText={(place) => {
+                setPlacementOrg(place);
+              }}
+            />
+            <TextInput
+              value={sid}
+              style={[form.textInput]}
+              placeholderTextColor={"#e8e8e8"}
+              placeholder="Student ID"
+              onChangeText={(sid) => {
+                setSID(sid);
+              }}
+            />
+            <TextInput
+              value={year_of_study}
+              style={[form.textInput]}
+              placeholderTextColor={"#e8e8e8"}
+              placeholder="Year"
+              onChangeText={(year) => {
+                setYear(year);
+              }}
+            />
+            <TextInput
+              value={mobile_number}
+              style={[form.textInput]}
+              placeholderTextColor={"#e8e8e8"}
+              placeholder="Mobile Number"
+              onChangeText={(mobile_number) => {
+                setMobileNumber(mobile_number);
+              }}
+            />
+            <TextInput
+              value={academic_proficiency}
+              style={[form.textInput]}
+              placeholderTextColor={"#e8e8e8"}
+              placeholder="Academic Proficiency"
+              onChangeText={(prof) => {
+                setAcadProf(prof);
+              }}
+            />
+            <TextInput
+              value={achievements}
+              style={[form.textInput]}
+              placeholderTextColor={"#e8e8e8"}
+              placeholder="Achievements"
+              onChangeText={(achievements) => {
+                setAchievements(achievements);
+              }}
+            />
+            <TextInput
+              value={technical_skills}
+              style={[form.textInput]}
+              placeholderTextColor={"#e8e8e8"}
+              placeholder="Technical Skills"
+              onChangeText={(technical_skills) => {
+                setTechnicalSkills(technical_skills);
+              }}
+            />
+            <View style={{ flexDirection: "row" }}>
+              <TextInput
+                value={interest}
+                style={{ ...form.textInput, marginRight: 10, flex: 1 }}
+                placeholderTextColor={"#e8e8e8"}
+                placeholder="Add Interest"
+                onChangeText={(interest) => {
+                  setInterest(interest);
+                }}
+              />
+              <TouchableOpacity onPress={() => addInterest(interest)}>
+                <Icon
+                  name="add"
+                  style={{ marginTop: 8 }}
+                  size={30}
+                  color={"#64B5F6"}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.menuItem}>
+              {interests.map((e, index) => (
+                <View key={index} style={{ flexDirection: "row" }}>
+                  <Text key={index} style={styles.interestText}>
+                    {e}
+                  </Text>
+                  <TouchableOpacity onPress={() => deleteInterest(index)}>
+                    <Icon name="close" color="#64B5F6" size={26} />
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </View>
+            <Button title="Apply Changes" onPress={() => Save()} />
+          </ScrollView>
         )}
-        <Text style={text.changePhoto}>Change Profile Photo</Text>
-      </TouchableOpacity>
-      {props.currentUser.type == "Student" && (
-        <ScrollView>
-          <TextInput
-            value={name}
-            style={form.textInput}
-            placeholder="Name"
-            placeholderTextColor={"#e8e8e8"}
-            onChangeText={(name) => setName(name)}
-          />
-          <TextInput
-            value={branch}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="Branch"
-            onChangeText={(branch) => {
-              setBranch(branch);
-            }}
-          />
-          <TextInput
-            value={summary}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="About"
-            onChangeText={(about) => {
-              setSummary(about);
-            }}
-          />
-          <TextInput
-            value={org_of_internship}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="Internship Organization"
-            onChangeText={(intern) => {
-              setInternOrg(intern);
-            }}
-          />
-          <TextInput
-            value={org_of_placement}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="Placement Organization"
-            onChangeText={(place) => {
-              setPlacementOrg(place);
-            }}
-          />
-          <TextInput
-            value={sid}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="Student ID"
-            onChangeText={(sid) => {
-              setSID(sid);
-            }}
-          />
-          <TextInput
-            value={year_of_study}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="Year"
-            onChangeText={(year) => {
-              setYear(year);
-            }}
-          />
-          <TextInput
-            value={mobile_number}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="Mobile Number"
-            onChangeText={(mobile_number) => {
-              setMobileNumber(mobile_number);
-            }}
-          />
-          <TextInput
-            value={academic_proficiency}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="Academic Proficiency"
-            onChangeText={(prof) => {
-              setAcadProf(prof);
-            }}
-          />
-          <TextInput
-            value={achievements}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="Achievements"
-            onChangeText={(achievements) => {
-              setAchievements(achievements);
-            }}
-          />
-          <TextInput
-            value={technical_skills}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="Technical Skills"
-            onChangeText={(technical_skills) => {
-              setTechnicalSkills(technical_skills);
-            }}
-          />
-          <View style={{ flexDirection: "row" }}>
+        {props.currentUser.type == "Faculty" && (
+          <ScrollView>
             <TextInput
-              value={interest}
-              style={{ ...form.textInput, marginRight: 10, flex: 1 }}
+              value={name}
+              style={form.textInput}
+              placeholder="Name"
               placeholderTextColor={"#e8e8e8"}
-              placeholder="Add Interest"
-              onChangeText={(interest) => {
-                setInterest(interest);
+              onChangeText={(name) => setName(name)}
+            />
+            <TextInput
+              value={summary}
+              style={[form.textInput]}
+              placeholderTextColor={"#e8e8e8"}
+              placeholder="About"
+              onChangeText={(about) => {
+                setSummary(about);
               }}
             />
-            <TouchableOpacity onPress={() => addInterest(interest)}>
-              <Icon
-                name="add"
-                style={{ marginTop: 8 }}
-                size={30}
-                color={"grey"}
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.menuItem}>
-            {interests.map((e, index) => (
-              <View key={index} style={{ flexDirection: "row" }}>
-                <Text key={index} style={styles.interestText}>
-                  {e}
-                </Text>
-                <TouchableOpacity onPress={() => deleteInterest(index)}>
-                  <Icon name="close" color="grey" size={26} />
-                </TouchableOpacity>
-              </View>
-            ))}
-          </View>
-          <Button title="Apply Changes" onPress={() => Save()} />
-        </ScrollView>
-      )}
-      {props.currentUser.type == "Faculty" && (
-        <ScrollView>
-          <TextInput
-            value={name}
-            style={form.textInput}
-            placeholder="Name"
-            placeholderTextColor={"#e8e8e8"}
-            onChangeText={(name) => setName(name)}
-          />
-          <TextInput
-            value={summary}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="About"
-            onChangeText={(about) => {
-              setSummary(about);
-            }}
-          />
-          <TextInput
-            value={department}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="Department"
-            onChangeText={(depart) => {
-              setDepartment(depart);
-            }}
-          />
-          <TextInput
-            value={designation}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="Designation"
-            onChangeText={(place) => {
-              setDesignation(place);
-            }}
-          />
-          <TextInput
-            value={eid}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="Employee ID"
-            onChangeText={(eid) => {
-              setEID(eid);
-            }}
-          />
-          <TextInput
-            value={mobile_number}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="Mobile Number"
-            onChangeText={(mobile_number) => {
-              setMobileNumber(mobile_number);
-            }}
-          />
-          <TextInput
-            value={technical_skills}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="Technical Skills"
-            onChangeText={(technical_skills) => {
-              setTechnicalSkills(technical_skills);
-            }}
-          />
-          <View style={{ flexDirection: "row" }}>
             <TextInput
-              value={interest}
-              style={{ ...form.textInput, marginRight: 10, flex: 1 }}
+              value={department}
+              style={[form.textInput]}
               placeholderTextColor={"#e8e8e8"}
-              placeholder="Add Interest"
-              onChangeText={(interest) => {
-                setInterest(interest);
+              placeholder="Department"
+              onChangeText={(depart) => {
+                setDepartment(depart);
               }}
             />
-            <TouchableOpacity onPress={() => addInterest(interest)}>
-              <Icon
-                name="add"
-                style={{ marginTop: 8 }}
-                size={30}
-                color={"grey"}
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.menuItem}>
-            {interests.map((e, index) => (
-              <View key={index} style={{ flexDirection: "row" }}>
-                <Text key={index} style={styles.interestText}>
-                  {e}
-                </Text>
-                <TouchableOpacity onPress={() => deleteInterest(index)}>
-                  <Icon name="close" color="grey" size={26} />
-                </TouchableOpacity>
-              </View>
-            ))}
-          </View>
-          <Button title="Apply Changes" onPress={() => Save()} />
-        </ScrollView>
-      )}
-      {props.currentUser.type == "Secretary" && (
-        <ScrollView>
-          <TextInput
-            value={name}
-            style={form.textInput}
-            placeholder="Name"
-            placeholderTextColor={"#e8e8e8"}
-            onChangeText={(name) => setName(name)}
-          />
-          <TextInput
-            value={club}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="Society/Club/NSS/NCC/Sports"
-            onChangeText={(club) => {
-              setClub(club);
-            }}
-          />
-          <TextInput
-            value={summary}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="About"
-            onChangeText={(about) => {
-              setSummary(about);
-            }}
-          />
-          <TextInput
-            value={department}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="Department"
-            onChangeText={(depart) => {
-              setDepartment(depart);
-            }}
-          />
-          <TextInput
-            value={designation}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="Designation"
-            onChangeText={(place) => {
-              setDesignation(place);
-            }}
-          />
-          <TextInput
-            value={sid}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="Student ID"
-            onChangeText={(sid) => {
-              setSID(sid);
-            }}
-          />
-          <TextInput
-            value={mobile_number}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="Mobile Number"
-            onChangeText={(mobile_number) => {
-              setMobileNumber(mobile_number);
-            }}
-          />
-          <View style={{ flexDirection: "row" }}>
             <TextInput
-              value={interest}
-              style={{ ...form.textInput, marginRight: 10, flex: 1 }}
+              value={designation}
+              style={[form.textInput]}
               placeholderTextColor={"#e8e8e8"}
-              placeholder="Add Interest"
-              onChangeText={(interest) => {
-                setInterest(interest);
+              placeholder="Designation"
+              onChangeText={(place) => {
+                setDesignation(place);
               }}
             />
-            <TouchableOpacity onPress={() => addInterest(interest)}>
-              <Icon
-                name="add"
-                style={{ marginTop: 8 }}
-                size={30}
-                color={"grey"}
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.menuItem}>
-            {interests.map((e, index) => (
-              <View key={index} style={{ flexDirection: "row" }}>
-                <Text key={index} style={styles.interestText}>
-                  {e}
-                </Text>
-                <TouchableOpacity onPress={() => deleteInterest(index)}>
-                  <Icon name="close" color="grey" size={26} />
-                </TouchableOpacity>
-              </View>
-            ))}
-          </View>
-          <Button title="Apply Changes" onPress={() => Save()} />
-        </ScrollView>
-      )}
-      {props.currentUser.type == "Webmaster" && (
-        <ScrollView>
-          <TextInput
-            value={name}
-            style={form.textInput}
-            placeholder="Name"
-            placeholderTextColor={"#e8e8e8"}
-            onChangeText={(name) => setName(name)}
-          />
-          <TextInput
-            value={summary}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="About"
-            onChangeText={(about) => {
-              setSummary(about);
-            }}
-          />
-          <TextInput
-            value={designation}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="Designation"
-            onChangeText={(place) => {
-              setDesignation(place);
-            }}
-          />
-          <TextInput
-            value={eid}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="Employee ID"
-            onChangeText={(eid) => {
-              setEID(eid);
-            }}
-          />
-          <TextInput
-            value={mobile_number}
-            style={[form.textInput]}
-            placeholderTextColor={"#e8e8e8"}
-            placeholder="Mobile Number"
-            onChangeText={(mobile_number) => {
-              setMobileNumber(mobile_number);
-            }}
-          />
-          <View style={{ flexDirection: "row" }}>
             <TextInput
-              value={interest}
-              style={{ ...form.textInput, marginRight: 10, flex: 1 }}
+              value={eid}
+              style={[form.textInput]}
               placeholderTextColor={"#e8e8e8"}
-              placeholder="Add Interest"
-              onChangeText={(interest) => {
-                setInterest(interest);
+              placeholder="Employee ID"
+              onChangeText={(eid) => {
+                setEID(eid);
               }}
             />
-            <TouchableOpacity onPress={() => addInterest(interest)}>
-              <Icon
-                name="add"
-                style={{ marginTop: 8 }}
-                size={30}
-                color={"grey"}
+            <TextInput
+              value={mobile_number}
+              style={[form.textInput]}
+              placeholderTextColor={"#e8e8e8"}
+              placeholder="Mobile Number"
+              onChangeText={(mobile_number) => {
+                setMobileNumber(mobile_number);
+              }}
+            />
+            <TextInput
+              value={technical_skills}
+              style={[form.textInput]}
+              placeholderTextColor={"#e8e8e8"}
+              placeholder="Technical Skills"
+              onChangeText={(technical_skills) => {
+                setTechnicalSkills(technical_skills);
+              }}
+            />
+            <View style={{ flexDirection: "row" }}>
+              <TextInput
+                value={interest}
+                style={{ ...form.textInput, marginRight: 10, flex: 1 }}
+                placeholderTextColor={"#e8e8e8"}
+                placeholder="Add Interest"
+                onChangeText={(interest) => {
+                  setInterest(interest);
+                }}
               />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.menuItem}>
-            {interests.map((e, index) => (
-              <View key={index} style={{ flexDirection: "row" }}>
-                <Text key={index} style={styles.interestText}>
-                  {e}
-                </Text>
-                <TouchableOpacity onPress={() => deleteInterest(index)}>
-                  <Icon name="close" color="grey" size={26} />
-                </TouchableOpacity>
-              </View>
-            ))}
-          </View>
-          <Button title="Apply Changes" onPress={() => Save()} />
-        </ScrollView>
-      )}
+              <TouchableOpacity onPress={() => addInterest(interest)}>
+                <Icon
+                  name="add"
+                  style={{ marginTop: 8 }}
+                  size={30}
+                  color={"#64B5F6"}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.menuItem}>
+              {interests.map((e, index) => (
+                <View key={index} style={{ flexDirection: "row" }}>
+                  <Text key={index} style={styles.interestText}>
+                    {e}
+                  </Text>
+                  <TouchableOpacity onPress={() => deleteInterest(index)}>
+                    <Icon name="close" color="#64B5F6" size={26} />
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </View>
+            <Button title="Apply Changes" onPress={() => Save()} />
+          </ScrollView>
+        )}
+        {props.currentUser.type == "Secretary" && (
+          <ScrollView>
+            <TextInput
+              value={name}
+              style={form.textInput}
+              placeholder="Name"
+              placeholderTextColor={"#e8e8e8"}
+              onChangeText={(name) => setName(name)}
+            />
+            <TextInput
+              value={club}
+              style={[form.textInput]}
+              placeholderTextColor={"#e8e8e8"}
+              placeholder="Society/Club/NSS/NCC/Sports"
+              onChangeText={(club) => {
+                setClub(club);
+              }}
+            />
+            <TextInput
+              value={summary}
+              style={[form.textInput]}
+              placeholderTextColor={"#e8e8e8"}
+              placeholder="About"
+              onChangeText={(about) => {
+                setSummary(about);
+              }}
+            />
+            <TextInput
+              value={department}
+              style={[form.textInput]}
+              placeholderTextColor={"#e8e8e8"}
+              placeholder="Department"
+              onChangeText={(depart) => {
+                setDepartment(depart);
+              }}
+            />
+            <TextInput
+              value={designation}
+              style={[form.textInput]}
+              placeholderTextColor={"#e8e8e8"}
+              placeholder="Designation"
+              onChangeText={(place) => {
+                setDesignation(place);
+              }}
+            />
+            <TextInput
+              value={sid}
+              style={[form.textInput]}
+              placeholderTextColor={"#e8e8e8"}
+              placeholder="Student ID"
+              onChangeText={(sid) => {
+                setSID(sid);
+              }}
+            />
+            <TextInput
+              value={mobile_number}
+              style={[form.textInput]}
+              placeholderTextColor={"#e8e8e8"}
+              placeholder="Mobile Number"
+              onChangeText={(mobile_number) => {
+                setMobileNumber(mobile_number);
+              }}
+            />
+            <View style={{ flexDirection: "row" }}>
+              <TextInput
+                value={interest}
+                style={{ ...form.textInput, marginRight: 10, flex: 1 }}
+                placeholderTextColor={"#e8e8e8"}
+                placeholder="Add Interest"
+                onChangeText={(interest) => {
+                  setInterest(interest);
+                }}
+              />
+              <TouchableOpacity onPress={() => addInterest(interest)}>
+                <Icon
+                  name="add"
+                  style={{ marginTop: 8 }}
+                  size={30}
+                  color={"#64B5F6"}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.menuItem}>
+              {interests.map((e, index) => (
+                <View key={index} style={{ flexDirection: "row" }}>
+                  <Text key={index} style={styles.interestText}>
+                    {e}
+                  </Text>
+                  <TouchableOpacity onPress={() => deleteInterest(index)}>
+                    <Icon name="close" color="#64B5F6" size={26} />
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </View>
+            <Button title="Apply Changes" onPress={() => Save()} />
+          </ScrollView>
+        )}
+        {props.currentUser.type == "Webmaster" && (
+          <ScrollView>
+            <TextInput
+              value={name}
+              style={form.textInput}
+              placeholder="Name"
+              placeholderTextColor={"#e8e8e8"}
+              onChangeText={(name) => setName(name)}
+            />
+            <TextInput
+              value={summary}
+              style={[form.textInput]}
+              placeholderTextColor={"#e8e8e8"}
+              placeholder="About"
+              onChangeText={(about) => {
+                setSummary(about);
+              }}
+            />
+            <TextInput
+              value={designation}
+              style={[form.textInput]}
+              placeholderTextColor={"#e8e8e8"}
+              placeholder="Designation"
+              onChangeText={(place) => {
+                setDesignation(place);
+              }}
+            />
+            <TextInput
+              value={eid}
+              style={[form.textInput]}
+              placeholderTextColor={"#e8e8e8"}
+              placeholder="Employee ID"
+              onChangeText={(eid) => {
+                setEID(eid);
+              }}
+            />
+            <TextInput
+              value={mobile_number}
+              style={[form.textInput]}
+              placeholderTextColor={"#e8e8e8"}
+              placeholder="Mobile Number"
+              onChangeText={(mobile_number) => {
+                setMobileNumber(mobile_number);
+              }}
+            />
+            <View style={{ flexDirection: "row" }}>
+              <TextInput
+                value={interest}
+                style={{ ...form.textInput, marginRight: 10, flex: 1 }}
+                placeholderTextColor={"#e8e8e8"}
+                placeholder="Add Interest"
+                onChangeText={(interest) => {
+                  setInterest(interest);
+                }}
+              />
+              <TouchableOpacity onPress={() => addInterest(interest)}>
+                <Icon
+                  name="add"
+                  style={{ marginTop: 8 }}
+                  size={30}
+                  color={"#64B5F6"}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.menuItem}>
+              {interests.map((e, index) => (
+                <View key={index} style={{ flexDirection: "row" }}>
+                  <Text key={index} style={styles.interestText}>
+                    {e}
+                  </Text>
+                  <TouchableOpacity onPress={() => deleteInterest(index)}>
+                    <Icon name="close" color="#64B5F6" size={26} />
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </View>
+            <Button title="Apply Changes" onPress={() => Save()} />
+          </ScrollView>
+        )}
+      </View>
     </View>
   );
 }
@@ -797,7 +803,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 16,
     lineHeight: 26,
-    borderColor: "grey",
+    borderColor: "#64B5F6",
     borderWidth: 1,
     borderRadius: 5,
     paddingLeft: 10,

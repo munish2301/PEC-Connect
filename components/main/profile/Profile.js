@@ -96,6 +96,7 @@ function Profile(props) {
     });
   };
   const clickingImage = () => {};
+  const profilelogo = require("./../../../assets/profile.png");
   if (props.route.params.uid !== auth.currentUser.uid) {
     props.navigation.setOptions({
       headerRight: ({}) => (
@@ -103,8 +104,8 @@ function Profile(props) {
           <Icon.Button
             name="chatbox"
             size={25}
-            backgroundColor="#FFFFFF"
-            color={colors.text}
+            backgroundColor="#1E88E5"
+            color="#fff"
             onPress={() => props.navigation.navigate("Chat", { user })}
           />
         </View>
@@ -113,7 +114,7 @@ function Profile(props) {
   }
   return (
     <ScrollView>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={{ ...styles.container, backgroundColor: "#E3F2FD" }}>
         <View style={styles.userInfoSection}>
           <View
             style={{
@@ -123,11 +124,17 @@ function Profile(props) {
           >
             <TouchableOpacity onPress={() => clickingImage()}>
               {user.image == "default" ? (
-                <FontAwesome5
-                  style={[utils.profileImageBig, utils.marginBottomSmall]}
-                  name="user-circle"
+                <Avatar.Image
+                  source={profilelogo}
                   size={180}
-                  color="black"
+                  style={{
+                    width: 180,
+                    height: 180,
+                    // borderWidth: 5,
+                    // borderColor: "#64B5F6",
+                    // borderRadius: 90,
+                    backgroundColor: "#fff",
+                  }}
                 />
               ) : (
                 <Avatar.Image
@@ -135,10 +142,18 @@ function Profile(props) {
                     uri: user.image,
                   }}
                   size={180}
+                  style={{
+                    width: 180,
+                    height: 180,
+                    // borderWidth: 5,
+                    // borderColor: "#64B5F6",
+                    // borderRadius: 90,
+                    backgroundColor: "#fff",
+                  }}
                 />
               )}
             </TouchableOpacity>
-            <View style={{ marginTop: 20, alignItems: "center" }}>
+            <View style={{ marginTop: 8, alignItems: "center" }}>
               <Title
                 style={[
                   styles.title,
@@ -150,7 +165,13 @@ function Profile(props) {
               >
                 {user.name}
               </Title>
-              <Caption style={{ ...styles.caption, paddingBottom: 20 }}>
+              <Caption
+                style={{
+                  ...styles.caption,
+                  paddingBottom: 20,
+                  color: "#64B5F6",
+                }}
+              >
                 {user.username}
               </Caption>
             </View>
@@ -215,7 +236,7 @@ function Profile(props) {
                       {e}
                     </Text>
                     <TouchableOpacity onPress={() => deleteInterest(index)}>
-                      <Icon name="close" color="grey" size={26} />
+                      <Icon name="close" color="#64B5F6" size={26} />
                     </TouchableOpacity>
                   </View>
                 ))}
@@ -264,7 +285,7 @@ function Profile(props) {
                       {e}
                     </Text>
                     <TouchableOpacity onPress={() => deleteInterest(index)}>
-                      <Icon name="close" color="grey" size={26} />
+                      <Icon name="close" color="#64B5F6" size={26} />
                     </TouchableOpacity>
                   </View>
                 ))}
@@ -317,7 +338,7 @@ function Profile(props) {
                       {e}
                     </Text>
                     <TouchableOpacity onPress={() => deleteInterest(index)}>
-                      <Icon name="close" color="grey" size={26} />
+                      <Icon name="close" color="#64B5F6" size={26} />
                     </TouchableOpacity>
                   </View>
                 ))}
@@ -358,7 +379,7 @@ function Profile(props) {
                       {e}
                     </Text>
                     <TouchableOpacity onPress={() => deleteInterest(index)}>
-                      <Icon name="close" color="grey" size={26} />
+                      <Icon name="close" color="#64B5F6" size={26} />
                     </TouchableOpacity>
                   </View>
                 ))}
@@ -412,18 +433,15 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   menuItemText: {
-    color: "#777777",
+    color: "grey",
     marginLeft: 5,
     fontWeight: "bold",
-    fontSize: 12,
+    fontSize: 13,
     lineHeight: 26,
   },
   menuitemText: {
     marginLeft: 10,
     fontWeight: "600",
-    borderColor: "white",
-    borderWidth: 1,
-    borderRadius: 5,
     paddingLeft: 10,
     paddingBottom: 5,
     paddingRight: 10,
@@ -437,7 +455,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 16,
     lineHeight: 26,
-    borderColor: "grey",
+    borderColor: "#64B5F6",
     borderWidth: 1,
     borderRadius: 5,
     paddingLeft: 10,
