@@ -18,10 +18,10 @@ const utils = StyleSheet.create({
     borderRadius: 180 / 2,
   },
   profileImage: {
-    marginRight: 15,
-    width: 40,
-    height: 40,
-    borderRadius: 40 / 2,
+    marginRight: 8,
+    width: 30,
+    height: 30,
+    borderRadius: 30 / 2,
   },
   profileImageSmall: {
     marginRight: 15,
