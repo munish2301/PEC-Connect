@@ -17,7 +17,7 @@ export default function Login(props) {
   };
   const logo = require("../../assets/logo.png");
   return (
-    <View style={container.center}>
+    <View style={{ ...container.center, backgroundColor: "#fff" }}>
       <View style={container.formCenter}>
         <View
           style={{
@@ -27,32 +27,29 @@ export default function Login(props) {
             paddingBottom: 20,
           }}
         >
-          <Image
+          <Text
             style={{
-              height: 50,
-              width: 90,
-              alignSelf: "center",
+              fontSize: 30,
+              fontWeight: "bold",
+              color: "#1E88E5",
             }}
-            source={logo}
-          />
+          >
+            PEC Connect
+          </Text>
         </View>
         <TextInput
           style={form.textInput}
-          placeholder="email"
+          placeholder="Email"
           onChangeText={(email) => setEmail(email)}
         />
         <TextInput
           style={form.textInput}
-          placeholder="password"
+          placeholder="Password"
           secureTextEntry={true}
           onChangeText={(password) => setPassword(password)}
         />
-
-        <Button
-          style={form.button}
-          onPress={() => onSignUp()}
-          title="Sign In"
-        />
+        <View style={{ marginBottom: 10 }}></View>
+        <Button onPress={() => onSignUp()} title="Sign In" />
       </View>
     </View>
   );

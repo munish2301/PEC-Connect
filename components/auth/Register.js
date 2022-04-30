@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, TextInput, View, ScrollView } from "react-native";
+import { Button, TextInput, View, ScrollView, Text } from "react-native";
 import { Snackbar } from "react-native-paper";
 import { container, form } from "../styles";
 import { firebaseConfig } from "../../firebase_config/firebaseConfig";
@@ -50,7 +50,7 @@ export default function Register(props) {
       setIsValid({
         bool: true,
         boolSnack: true,
-        message: "passwords must be at least 6 characters",
+        message: "Password must be at least 6 characters",
       });
       return;
     }
@@ -180,68 +180,73 @@ export default function Register(props) {
     },
   ];
   return (
-    <ScrollView>
-      <View style={container.center}>
-        <View style={container.formCenter}>
-          <TextInput
-            style={form.textInput}
-            placeholder="Username"
-            value={username}
-            keyboardType="twitter"
-            onChangeText={(username) =>
-              setUsername(
-                username
-                  .normalize("NFD")
-                  .replace(/[\u0300-\u036f]/g, "")
-                  .replace(/\s+/g, "")
-                  .replace(/[^a-z0-9]/gi, "")
-              )
-            }
-          />
-          <TextInput
-            style={form.textInput}
-            placeholder="name"
-            onChangeText={(name) => setName(name)}
-          />
-          <TextInput
-            style={form.textInput}
-            placeholder="email"
-            onChangeText={(email) => setEmail(email)}
-          />
-          <TextInput
-            style={form.textInput}
-            placeholder="password"
-            secureTextEntry={true}
-            onChangeText={(password) => setPassword(password)}
-          />
-          <RadioButtonRN
-            data={data}
-            selectedBtn={(e) => {
-              setType(e.label);
-            }}
-          />
-          <View
-            style={{
-              height: 10,
-            }}
-          />
-          <Button
-            style={form.button}
-            onPress={() => onRegister()}
-            title="Register"
-          />
-        </View>
-
-        <Snackbar
-          visible={isValid.boolSnack}
-          duration={2000}
-          onDismiss={() => {
-            setIsValid({ boolSnack: false });
+    <ScrollView style={{ ...container.center, backgroundColor: "#fff" }}>
+      <View style={{ ...container.formCenter }}>
+        <TextInput
+          style={form.textInput}
+          placeholder="Username"
+          value={username}
+          keyboardType="twitter"
+          onChangeText={(username) =>
+            setUsername(
+              username
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/\s+/g, "")
+                .replace(/[^a-z0-9]/gi, "")
+            )
+          }
+        />
+        <TextInput
+          style={form.textInput}
+          placeholder="Name"
+          onChangeText={(name) => setName(name)}
+        />
+        <TextInput
+          style={form.textInput}
+          placeholder="Email"
+          onChangeText={(email) => setEmail(email)}
+        />
+        <TextInput
+          style={form.textInput}
+          placeholder="Password"
+          secureTextEntry={true}
+          onChangeText={(password) => setPassword(password)}
+        />
+        <Text
+          style={{
+            fontSize: 14,
+            fontWeight: "600",
+            color: "black",
+            paddingTop: 20,
           }}
         >
-          {isValid.message}
-        </Snackbar>
+          Pick one Role:
+        </Text>
+        <RadioButtonRN
+          boxStyle={{ borderWidth: 0, height: 47 }}
+          data={data}
+          selectedBtn={(e) => {
+            setType(e.label);
+          }}
+        />
+        <View
+          style={{
+            height: 52,
+          }}
+        />
+        <Button onPress={() => onRegister()} title="Register" />
       </View>
+
+      <Snackbar
+        visible={isValid.boolSnack}
+        duration={2000}
+        onDismiss={() => {
+          setIsValid({ boolSnack: false });
+        }}
+      >
+        {isValid.message}
+      </Snackbar>
     </ScrollView>
   );
 }

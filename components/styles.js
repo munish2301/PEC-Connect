@@ -138,6 +138,7 @@ const container = StyleSheet.create({
     display: "flex",
   },
   form: {
+    backgroundColor: "#fff",
     flex: 1,
     margin: 25,
   },
@@ -200,12 +201,12 @@ const container = StyleSheet.create({
 
 const form = StyleSheet.create({
   textInput: {
-    marginBottom: 10,
-    borderColor: "gray",
-    backgroundColor: "whitesmoke",
-    padding: 10,
-    borderWidth: 1,
-    borderRadius: 8,
+    marginBottom: 8,
+    borderColor: "#64B5F6",
+    backgroundColor: "#fff",
+    paddingBottom: 0,
+    padding: 5,
+    borderBottomWidth: 1,
   },
   bottomButton: {
     alignContent: "center",
@@ -235,10 +236,10 @@ const text = StyleSheet.create({
   },
   changePhoto: {
     marginTop: 5,
-    color: "deepskyblue",
+    color: "#64B5F6",
   },
   deepskyblue: {
-    color: "deepskyblue",
+    color: "#64B5F6",
   },
   username: {
     fontWeight: "600",

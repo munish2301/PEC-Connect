@@ -126,13 +126,13 @@ function Profile(props) {
               {user.image == "default" ? (
                 <Avatar.Image
                   source={profilelogo}
-                  size={170}
+                  size={180}
                   style={{
                     width: 180,
                     height: 180,
-                    borderWidth: 5,
-                    borderColor: "#64B5F6",
-                    borderRadius: 90,
+                    // borderWidth: 5,
+                    // borderColor: "#64B5F6",
+                    // borderRadius: 90,
                     backgroundColor: "#fff",
                   }}
                 />
@@ -141,19 +141,19 @@ function Profile(props) {
                   source={{
                     uri: user.image,
                   }}
-                  size={170}
+                  size={180}
                   style={{
                     width: 180,
                     height: 180,
-                    borderWidth: 5,
-                    borderColor: "#64B5F6",
-                    borderRadius: 90,
+                    // borderWidth: 5,
+                    // borderColor: "#64B5F6",
+                    // borderRadius: 90,
                     backgroundColor: "#fff",
                   }}
                 />
               )}
             </TouchableOpacity>
-            <View style={{ marginTop: 20, alignItems: "center" }}>
+            <View style={{ marginTop: 8, alignItems: "center" }}>
               <Title
                 style={[
                   styles.title,

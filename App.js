@@ -120,19 +120,20 @@ export default function App(props) {
             options={({}) => {
               return {
                 title: "Register New User",
+                headerTintColor: "#fff",
                 headerRight: () => (
                   <View style={{ marginRight: 10 }}>
                     <Icon.Button
                       name="ios-log-out"
                       size={25}
-                      backgroundColor="#FFFFFF"
-                      color={colors.text}
+                      backgroundColor="#1E88E5"
+                      color="#fff"
                       onPress={() => onLogout()}
                     />
                   </View>
                 ),
                 headerStyle: {
-                  backgroundColor: "#E3F2FD",
+                  backgroundColor: "#1E88E5",
                 },
               };
             }}
