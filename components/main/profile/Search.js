@@ -2,13 +2,14 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
   Text,
-  TextInput,
   TouchableOpacity,
   ScrollView,
   StyleSheet,
   View,
+  Image,
 } from "react-native";
 import { container, text, utils } from "../../styles";
+import Icon from "react-native-vector-icons/Ionicons";
 import SearchInput, { createFilter } from "react-native-search-filter";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../../../firebase_config/firebaseConfig";
@@ -47,6 +48,7 @@ function Search(props) {
   } catch (err) {
     console.log(err);
   }
+  const profilelogo = require("./../../../assets/profile.png");
   const filteredUsers = users.filter(createFilter(searchTerm, KEYS_TO_FILTERS));
   return (
     <View style={styles.container}>
@@ -70,87 +72,60 @@ function Search(props) {
               key={user.id}
               style={styles.emailItem}
             >
-              <View>
-                <Text>{user.username}</Text>
-                <Text style={styles.emailSubject}>{user.name}</Text>
+              <View style={{ flexDirection: "row" }}>
+                <View style={{ ...utils.justifyCenter }}>
+                  <Icon name="search" color="#64B5F6" size={15} />
+                </View>
+                <View style={{ ...utils.justifyCenter, marginLeft: 15 }}>
+                  <Text style={text.username}>{user.username}</Text>
+                  <Text style={text.name}>{user.name}</Text>
+                </View>
               </View>
+
+              {user.image == "default" ? (
+                <Image
+                  style={[utils.profileImage, utils.marginBottomSmall]}
+                  source={profilelogo}
+                />
+              ) : (
+                <Image
+                  style={[utils.profileImage, utils.marginBottomSmall]}
+                  source={{
+                    uri: user.image,
+                  }}
+                />
+              )}
             </TouchableOpacity>
           );
         })}
       </ScrollView>
     </View>
-    // <View style={[utils.backgroundWhite, container.container]}>
-    //   <View style={{ marginVertical: 30, paddingHorizontal: 20 }}>
-    //     <TextInput
-    //       style={utils.searchBar}
-    //       placeholder="Type Here..."
-    //       onChangeText={(search) =>
-    //         props.queryUsersByUsername(search).then(setUsers)
-    //       }
-    //     />
-    //   </View>
-
-    //   <FlatList
-    //     numColumns={1}
-    //     horizontal={false}
-    //     data={users}
-    //     renderItem={({ item }) => (
-    //       <TouchableOpacity
-    //         style={[
-    //           container.horizontal,
-    //           utils.padding10Sides,
-    //           utils.padding10Top,
-    //         ]}
-    //         onPress={() =>
-    //           props.navigation.navigate("Profile", {
-    //             uid: item.id,
-    //             username: undefined,
-    //           })
-    //         }
-    //       >
-    //         {item.image == "default" ? (
-    //           <FontAwesome5
-    //             style={[utils.profileImage, utils.marginBottomSmall]}
-    //             name="user-circle"
-    //             size={50}
-    //             color="black"
-    //           />
-    //         ) : (
-    //           <Image
-    //             style={[utils.profileImage, utils.marginBottomSmall]}
-    //             source={{
-    //               uri: item.image,
-    //             }}
-    //           />
-    //         )}
-    //         <View style={utils.justifyCenter}>
-    //           <Text style={text.username}>{item.username}</Text>
-    //           <Text style={text.name}>{item.name}</Text>
-    //         </View>
-    //       </TouchableOpacity>
-    //     )}
-    //   />
-    // </View>
   );
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "white",
     justifyContent: "flex-start",
   },
   emailItem: {
-    borderBottomWidth: 0.5,
-    borderColor: "rgba(0,0,0,0.3)",
+    flexDirection: "row",
+    justifyContent: "space-between",
     padding: 10,
+    marginLeft: 10,
   },
   emailSubject: {
     color: "rgba(0,0,0,0.5)",
   },
   searchInput: {
-    padding: 10,
-    borderColor: "#CCC",
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 5,
+    paddingBottom: 5,
+    margin: 15,
+    borderColor: "#64B5F6",
     borderWidth: 1,
+    borderRadius: 50,
   },
 });
 

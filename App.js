@@ -120,17 +120,21 @@ export default function App(props) {
             options={({}) => {
               return {
                 title: "Register New User",
+                headerTintColor: "#fff",
                 headerRight: () => (
                   <View style={{ marginRight: 10 }}>
                     <Icon.Button
                       name="ios-log-out"
                       size={25}
-                      backgroundColor="#FFFFFF"
-                      color={colors.text}
+                      backgroundColor="#1E88E5"
+                      color="#fff"
                       onPress={() => onLogout()}
                     />
                   </View>
                 ),
+                headerStyle: {
+                  backgroundColor: "#1E88E5",
+                },
               };
             }}
           />
@@ -154,34 +158,43 @@ export default function App(props) {
                   case "Camera": {
                     return {
                       headerTitle: "Camera",
+                      headerTintColor: "#fff",
+                      headerStyle: {
+                        backgroundColor: "#1E88E5",
+                      },
                     };
                   }
                   case "chat": {
                     return {
                       headerTitle: "Chat",
+                      headerTintColor: "#fff",
                       headerRight: () => (
                         <View style={{ marginRight: 10 }}>
                           <Icon.Button
                             name="ios-search"
                             size={25}
-                            backgroundColor="#FFFFFF"
-                            color={colors.text}
+                            backgroundColor="#1E88E5"
+                            color="#fff"
                             onPress={() => navigation.navigate("Search")}
                           />
                         </View>
                       ),
+                      headerStyle: {
+                        backgroundColor: "#1E88E5",
+                      },
                     };
                   }
                   case "Profile": {
                     return {
                       headerTitle: "Profile",
+                      headerTintColor: "#fff",
                       headerLeft: () => (
                         <View style={{ marginLeft: 10 }}>
                           <Icon.Button
                             name="ios-log-out"
                             size={25}
-                            color={colors.text}
-                            backgroundColor="#FFFFFF"
+                            color="#fff"
+                            backgroundColor="#1E88E5"
                             onPress={() => onLogout()}
                           />
                         </View>
@@ -191,29 +204,36 @@ export default function App(props) {
                           <MaterialCommunityIcons.Button
                             name="account-edit"
                             size={25}
-                            backgroundColor="#FFFFFF"
-                            color={colors.text}
+                            backgroundColor="#1E88E5"
+                            color="#fff"
                             onPress={() => navigation.navigate("Edit")}
                           />
                         </View>
                       ),
+                      headerStyle: {
+                        backgroundColor: "#1E88E5",
+                      },
                     };
                   }
                   case "Feed":
                   default: {
                     return {
-                      headerTitle: "PEC-Connect",
+                      headerTitle: "PEC Connect",
+                      headerTintColor: "#fff",
                       headerRight: () => (
                         <View style={{ marginRight: 10 }}>
                           <Icon.Button
                             name="ios-search"
                             size={25}
-                            backgroundColor="#FFFFFF"
-                            color={colors.text}
+                            backgroundColor="#1E88E5"
+                            color="#fff"
                             onPress={() => navigation.navigate("Search")}
                           />
                         </View>
                       ),
+                      headerStyle: {
+                        backgroundColor: "#1E88E5",
+                      },
                     };
                   }
                 }
@@ -239,17 +259,21 @@ export default function App(props) {
               options={({ navigation }) => {
                 return {
                   title: "Search",
+                  headerTintColor: "#fff",
                   headerRight: () => (
                     <View style={{ marginRight: 10 }}>
                       <Icon.Button
                         name="ios-chatbox"
                         size={25}
-                        backgroundColor="#FFFFFF"
-                        color={colors.text}
+                        backgroundColor="#1E88E5"
+                        color="#fff"
                         onPress={() => navigation.navigate("ChatList")}
                       />
                     </View>
                   ),
+                  headerStyle: {
+                    backgroundColor: "#1E88E5",
+                  },
                 };
               }}
             />
@@ -273,17 +297,21 @@ export default function App(props) {
               options={({ navigation }) => {
                 return {
                   title: "Chat",
+                  headerTintColor: "#fff",
                   headerRight: () => (
                     <View style={{ marginRight: 10 }}>
                       <Icon.Button
                         name="ios-search"
                         size={25}
-                        backgroundColor="#FFFFFF"
-                        color={colors.text}
+                        backgroundColor="#1E88E5"
+                        color="#fff"
                         onPress={() => navigation.navigate("Search")}
                       />
                     </View>
                   ),
+                  headerStyle: {
+                    backgroundColor: "#1E88E5",
+                  },
                 };
               }}
             />
@@ -301,13 +329,14 @@ export default function App(props) {
               options={({ navigation }) => {
                 return {
                   headerTitle: "Profile",
+                  headerTintColor: "#fff",
                   headerLeft: () => (
                     <View style={{ marginLeft: 10 }}>
                       <Icon.Button
                         name="ios-log-out"
                         size={25}
-                        color={colors.text}
-                        backgroundColor="#FFFFFF"
+                        color="#fff"
+                        backgroundColor="#1E88E5"
                         onPress={() => onLogout()}
                       />
                     </View>
@@ -317,12 +346,15 @@ export default function App(props) {
                       <MaterialCommunityIcons.Button
                         name="account-edit"
                         size={25}
-                        backgroundColor="#FFFFFF"
-                        color={colors.text}
+                        color="#fff"
+                        backgroundColor="#1E88E5"
                         onPress={() => navigation.navigate("Edit")}
                       />
                     </View>
                   ),
+                  headerStyle: {
+                    backgroundColor: "#1E88E5",
+                  },
                 };
               }}
             />
