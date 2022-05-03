@@ -1,6 +1,6 @@
 import { FontAwesome5 } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, Text, TouchableOpacity, View ,StyleSheet,} from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { Divider } from "react-native-paper";
 import { connect } from "react-redux";
@@ -29,11 +29,15 @@ const db = getFirestore(firebaseApp);
 const auth = getAuth(firebaseApp);
 
 function Chat(props) {
+  // console.log('list props', props)
+  // console.log('length', props.chats.length)
+  // console.log('chats', props.chats)
   const [chats, setChats] = useState([]);
   const [reload, setReload] = useState(false);
   const [input, setInput] = useState("");
   const [caption, setCaption] = useState("");
   const [textInput, setTextInput] = useState(null);
+  const time="4:00 PM"
 
   useEffect(() => {
     for (let i = 0; i < props.chats.length; i++) {
@@ -159,10 +163,7 @@ function Chat(props) {
           keyExtractor={(item, index) => item.id}
           renderItem={({ item }) => (
             <View
-              style={
-                !item[auth.currentUser.uid]
-                  ? { backgroundColor: "#d2eeff" }
-                  : null
+              style={styles.conservation
               }
             >
               {item.otherUser == null ? (
@@ -187,14 +188,14 @@ function Chat(props) {
                   <View style={container.horizontal}>
                     {item.otherUser.image == "default" ? (
                       <FontAwesome5
-                        style={[utils.profileImageSmall]}
+                        style={styles.image}
                         name="user-circle"
                         size={35}
                         color="black"
                       />
                     ) : (
                       <Image
-                        style={[utils.profileImageSmall]}
+                        style={styles.image}
                         source={{
                           uri: item.otherUser.image,
                         }}
@@ -202,37 +203,37 @@ function Chat(props) {
                     )}
                   </View>
 
-                  <View>
-                    <Text style={[text.bold]}>{item.otherUser.name}</Text>
-
-                    <Text
-                      numberOfLines={1}
-                      ellipsizeMode="tail"
-                      style={[
-                        utils.margin15Right,
-                        utils.margin5Bottom,
-                        { paddingBottom: 10 },
-                      ]}
-                    >
-                      {item.lastMessage}{" "}
-                      {item.lastMessageTimestamp == null ? (
-                        <Text
-                          style={[text.grey, text.small, utils.margin5Bottom]}
-                        >
-                          Now
-                        </Text>
-                      ) : (
-                        <Text
-                          style={[text.grey, text.small, utils.margin5Bottom]}
-                        >
+                      <View style={{
+                          flex: 1,
+                          justifyContent: 'center'
+                        }}>
+                        <View style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between'
+                        }}>
+                          <Text numerOfLine={1} style={styles.username}>{item.otherUser.name}</Text>
+                           {item.lastMessageTimestamp == null ? (<Text style={styles.time}>Now</Text>) :
+                         ( <Text style={styles.time}>
                           {timeDifference(
                             new Date(),
                             item.lastMessageTimestamp.toDate()
                           )}
                         </Text>
-                      )}
-                    </Text>
-                  </View>
+                         )}
+                        
+                        </View>
+                        <View style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between'
+                        }}>
+                          <Text style={styles.message}>{item.lastMessage}</Text>
+                          <View style={styles.notificationCircle}>
+                            <Text style={styles.notification}>4</Text>
+                          </View>
+                        </View>
+                      </View>
+
+                  
 
                   {share ? (
                     <TouchableOpacity
@@ -292,3 +293,65 @@ const mapDispatchProps = (dispatch) =>
   bindActionCreators({ fetchUsersData }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchProps)(Chat);
+
+const styles = StyleSheet.create({
+	container: {
+
+	},
+	conversation: {
+		flexDirection: 'row',
+		paddingBottom: 25,
+		paddingRight: 20,
+		paddingLeft: 10
+	},
+	imageContainer: {
+		marginRight: 15,
+		borderRadius: 25,
+		height: 50,
+		width: 50,
+		overflow: 'hidden',
+		alignItems: 'center',
+		justifyContent: 'center',
+		alignSelf: 'center' 
+	},
+	image: {
+		marginRight: 15,
+		borderRadius: 25,
+		height: 50,
+		width: 50,
+    overflow: 'hidden',
+		alignItems: 'center',
+		justifyContent: 'center',
+		alignSelf: 'center'
+	},
+	username: {
+		fontSize: 18,
+		color: "#000",
+		width: 210
+	},
+	message: {
+		fontSize: 15,
+		width: 240,
+		color: '#555'
+	},
+	time: {
+		fontSize: 13,
+		color: '#555',
+		fontWeight: '300'
+	},
+	notificationCircle: {
+		backgroundColor: '#1e88e5',
+		borderRadius: 50,
+		height: 20,
+		width: 20,
+		marginRight: 5,
+		alignItems: 'center',
+		justifyContent: 'center'
+	},
+	notification: {
+		color: '#fff',
+		fontWeight: 'bold',
+		fontSize: 10
+	}
+})
+
