@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   StyleSheet,
 } from "react-native";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { Avatar, Title, useTheme, Caption, Text } from "react-native-paper";
 import Icon from "react-native-vector-icons/Ionicons";
 import { ScrollView } from "react-native-gesture-handler";
@@ -46,9 +47,6 @@ function Profile(props) {
       const docRef = doc(usersCollectionRef, props.route.params.uid);
       const snapshot = await getDoc(docRef);
       if (snapshot.exists) {
-        props.navigation.setOptions({
-          title: snapshot.data().username,
-        });
         setUser({ uid: props.route.params.uid, ...snapshot.data() });
       }
       setLoading(false);
@@ -100,7 +98,16 @@ function Profile(props) {
   if (props.route.params.uid !== auth.currentUser.uid) {
     props.navigation.setOptions({
       headerRight: ({}) => (
-        <View style={{ marginRight: 10 }}>
+        <View style={{ marginRight: 10, flexDirection: "row" }}>
+          {(user.type === "Secretary" || user.type === "Webmaster") && (
+            <MaterialCommunityIcons.Button
+              name="border-all"
+              size={25}
+              backgroundColor="#1E88E5"
+              color="#fff"
+              onPress={() => {}}
+            />
+          )}
           <Icon.Button
             name="chatbox"
             size={25}

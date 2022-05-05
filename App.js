@@ -200,7 +200,17 @@ export default function App(props) {
                         </View>
                       ),
                       headerRight: () => (
-                        <View style={{ marginRight: 10 }}>
+                        <View style={{ marginRight: 10, flexDirection: "row" }}>
+                          {(user.type === "Secretary" ||
+                            user.type === "Webmaster") && (
+                            <MaterialCommunityIcons.Button
+                              name="border-all"
+                              size={25}
+                              backgroundColor="#1E88E5"
+                              color="#fff"
+                              onPress={() => {}}
+                            />
+                          )}
                           <MaterialCommunityIcons.Button
                             name="account-edit"
                             size={25}
@@ -342,7 +352,17 @@ export default function App(props) {
                     </View>
                   ),
                   headerRight: () => (
-                    <View style={{ marginRight: 10 }}>
+                    <View style={{ marginRight: 10, flexDirection: "row" }}>
+                      {(user.type === "Secretary" ||
+                        user.type === "Webmaster") && (
+                        <MaterialCommunityIcons.Button
+                          name="border-all"
+                          size={25}
+                          backgroundColor="#1E88E5"
+                          color="#fff"
+                          onPress={() => {}}
+                        />
+                      )}
                       <MaterialCommunityIcons.Button
                         name="account-edit"
                         size={25}
