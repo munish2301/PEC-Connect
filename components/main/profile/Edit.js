@@ -477,7 +477,7 @@ function Edit(props) {
                 value={interest}
                 style={{ ...form.textInput, marginRight: 10, flex: 1 }}
                 placeholderTextColor={"#e8e8e8"}
-                placeholder="Add Interest"
+                placeholder="Add Feed Preference"
                 onChangeText={(interest) => {
                   setInterest(interest);
                 }}
@@ -574,7 +574,7 @@ function Edit(props) {
                 value={interest}
                 style={{ ...form.textInput, marginRight: 10, flex: 1 }}
                 placeholderTextColor={"#e8e8e8"}
-                placeholder="Add Interest"
+                placeholder="Add Feed Preference"
                 onChangeText={(interest) => {
                   setInterest(interest);
                 }}
@@ -671,7 +671,7 @@ function Edit(props) {
                 value={interest}
                 style={{ ...form.textInput, marginRight: 10, flex: 1 }}
                 placeholderTextColor={"#e8e8e8"}
-                placeholder="Add Interest"
+                placeholder="Add Feed Preference"
                 onChangeText={(interest) => {
                   setInterest(interest);
                 }}
@@ -750,7 +750,7 @@ function Edit(props) {
                 value={interest}
                 style={{ ...form.textInput, marginRight: 10, flex: 1 }}
                 placeholderTextColor={"#e8e8e8"}
-                placeholder="Add Interest"
+                placeholder="Add Feed Preference"
                 onChangeText={(interest) => {
                   setInterest(interest);
                 }}

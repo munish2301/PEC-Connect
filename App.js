@@ -87,7 +87,7 @@ export default function App(props) {
         <Image
           style={{
             height: 100,
-            width: 180,
+            width: 220,
             alignSelf: "center",
           }}
           source={logo}

@@ -228,7 +228,7 @@ function Profile(props) {
             {props.route.params.uid === auth.currentUser.uid && (
               <View style={styles.menuItem}>
                 {user.interests.length !== 0 && (
-                  <Text style={styles.menuItemText}>Interests</Text>
+                  <Text style={styles.menuItemText}>Feed Preferences</Text>
                 )}
                 {user.interests.map((e, index) => (
                   <View key={index} style={{ flexDirection: "row" }}>
@@ -277,7 +277,7 @@ function Profile(props) {
             {props.route.params.uid === auth.currentUser.uid && (
               <View style={styles.menuItem}>
                 {user.interests.length !== 0 && (
-                  <Text style={styles.menuItemText}>Interests</Text>
+                  <Text style={styles.menuItemText}>Feed Preferences</Text>
                 )}
                 {user.interests.map((e, index) => (
                   <View key={index} style={{ flexDirection: "row" }}>
@@ -330,7 +330,7 @@ function Profile(props) {
             {props.route.params.uid === auth.currentUser.uid && (
               <View style={styles.menuItem}>
                 {user.interests.length !== 0 && (
-                  <Text style={styles.menuItemText}>Interests</Text>
+                  <Text style={styles.menuItemText}>Feed Preferences</Text>
                 )}
                 {user.interests.map((e, index) => (
                   <View key={index} style={{ flexDirection: "row" }}>
@@ -371,7 +371,7 @@ function Profile(props) {
             {props.route.params.uid === auth.currentUser.uid && (
               <View style={styles.menuItem}>
                 {user.interests.length !== 0 && (
-                  <Text style={styles.menuItemText}>Interests</Text>
+                  <Text style={styles.menuItemText}>Feed Preferences</Text>
                 )}
                 {user.interests.map((e, index) => (
                   <View key={index} style={{ flexDirection: "row" }}>
