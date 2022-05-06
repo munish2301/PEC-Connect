@@ -43,7 +43,7 @@
     "expo-video-player": "^2.0.3",
     "expo-video-thumbnails": "~6.1.0",
     "firebase": "^9.6.2",
-    "firebase-admin": "^10.0.2",
+    "firebase-admin": "^10.2.0",
     "get-video-duration": "^4.0.0",
     "prop-types": "^15.8.1",
     "queue": "^6.0.2",
