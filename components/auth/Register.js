@@ -15,7 +15,11 @@ import {
   setDoc,
   getDocs,
 } from "firebase/firestore";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
@@ -192,6 +196,12 @@ export default function Register(props) {
                 interests: [],
               });
             }
+            await auth.signOut();
+            await signInWithEmailAndPassword(
+              auth,
+              "admin@gmail.com",
+              "admin1234"
+            );
           })
           .catch(() => {
             setIsValid({

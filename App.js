@@ -14,6 +14,8 @@ import * as Updates from "expo-updates";
 import { useTheme, Avatar } from "react-native-paper";
 import LoginScreen from "./components/auth/Login";
 import RegisterScreen from "./components/auth/Register";
+import DeleteUserScreen from "./components/auth/DeleteUser";
+import AdminHomeScreen from "./components/auth/AdminHome";
 import MainScreen from "./components/Main";
 import SaveScreen from "./components/main/add/Save";
 import ChatScreen from "./components/main/chat/Chat";
@@ -112,7 +114,32 @@ export default function App(props) {
   if (user.isAdmin) {
     return (
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Register">
+        <Stack.Navigator initialRouteName="AdminHome">
+          <Stack.Screen
+            name="AdminHome"
+            component={AdminHomeScreen}
+            navigation={props.navigation}
+            options={({}) => {
+              return {
+                title: "PEC Connect",
+                headerTintColor: "#fff",
+                headerRight: () => (
+                  <View style={{ marginRight: 10 }}>
+                    <Icon.Button
+                      name="ios-log-out"
+                      size={25}
+                      backgroundColor="#1E88E5"
+                      color="#fff"
+                      onPress={() => onLogout()}
+                    />
+                  </View>
+                ),
+                headerStyle: {
+                  backgroundColor: "#1E88E5",
+                },
+              };
+            }}
+          />
           <Stack.Screen
             name="Register"
             component={RegisterScreen}
@@ -120,6 +147,31 @@ export default function App(props) {
             options={({}) => {
               return {
                 title: "Register New User",
+                headerTintColor: "#fff",
+                headerRight: () => (
+                  <View style={{ marginRight: 10 }}>
+                    <Icon.Button
+                      name="ios-log-out"
+                      size={25}
+                      backgroundColor="#1E88E5"
+                      color="#fff"
+                      onPress={() => onLogout()}
+                    />
+                  </View>
+                ),
+                headerStyle: {
+                  backgroundColor: "#1E88E5",
+                },
+              };
+            }}
+          />
+          <Stack.Screen
+            name="DeleteUser"
+            component={DeleteUserScreen}
+            navigation={props.navigation}
+            options={({}) => {
+              return {
+                title: "Delete Existing User",
                 headerTintColor: "#fff",
                 headerRight: () => (
                   <View style={{ marginRight: 10 }}>
