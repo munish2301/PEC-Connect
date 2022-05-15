@@ -6,7 +6,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import "expo-asset";
 import _ from "lodash";
 import React from "react";
-import { View, Image, LogBox } from "react-native";
+import { View, Image, LogBox, Text, Picker} from "react-native";
 import { Provider } from "react-redux";
 import { applyMiddleware, createStore } from "redux";
 import thunk from "redux-thunk";
@@ -33,6 +33,11 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { firebaseConfig } from "./firebase_config/firebaseConfig";
 import { useState, useEffect } from "react";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import {Dropdown} from "react-native-element-dropdown"
+import { StyleSheet } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
+
 const store = createStore(rootReducer, applyMiddleware(thunk));
 LogBox.ignoreLogs(["Setting a timer"]);
 const _console = _.clone(console);
@@ -55,6 +60,9 @@ export default function App(props) {
   const [loggedIn, setloggedIn] = useState(false);
   const [user, setUser] = useState({});
   const { colors } = useTheme();
+  const [value, setValue] = useState("PecConnect");
+  const [isFocus, setIsFocus] = useState(false);
+
   let userDocRef = null;
   useEffect(() => {
     onAuthStateChanged(auth, (USER) => {
@@ -70,8 +78,23 @@ export default function App(props) {
         });
       }
     });
-  }, []);
+  }, [value]);
 
+  // function LogoTitle() {
+  //   return (
+  //     <TouchableOpacity onPress={alert('test')}>
+  //       <Text>"PEC-Connect"</Text>
+  //     </TouchableOpacity>
+  //   );
+  // }
+  const dropdownOptions = [
+    { label: 'PecConnect', value: 'PecConnect' },
+    { label: 'NSS', value: 'NSS' },
+    { label: 'NCC', value: 'NCC' },
+    { label: 'Tech', value: 'Tech' },
+    { label: 'Cultural', value: 'Cultural' },
+    { label: 'Sports', value: 'Sports' },
+  ];
   if (!loaded) {
     return (
       <View
@@ -143,11 +166,9 @@ export default function App(props) {
             <Stack.Screen
               key={Date.now()}
               name="Main"
-              component={MainScreen}
               navigation={props.navigation}
               options={({ navigation, route }) => {
                 const routeName = getFocusedRouteNameFromRoute(route) ?? "Feed";
-
                 switch (routeName) {
                   case "Camera": {
                     return {
@@ -199,8 +220,30 @@ export default function App(props) {
                   }
                   case "Feed":
                   default: {
-                    return {
-                      headerTitle: "PEC-Connect",
+                    return { 
+                      headerTitle: "",
+                      headerLeft: () => (
+                        <View style = {{marginLeft: 20 }}>
+                          <Dropdown
+                            style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                            placeholderStyle={styles.placeholderStyle}
+                            selectedTextStyle={styles.selectedTextStyle}
+                            containerStyle ={{borderTopWidth:0 }}
+                            data={dropdownOptions}
+                            maxHeight={180}
+                            dropdownPosition ="bottom"
+                            labelField="label"
+                            valueField="value"
+                            placeholder={!isFocus ? 'PecConnect' : value}
+                            value={value}
+                            onFocus={() => setIsFocus(true)}
+                            onChange={item => {
+                              setValue(item.value)
+                              setIsFocus(false);
+                            }}
+                          />
+                        </View> 
+                      ),
                       headerRight: () => (
                         <View style={{ marginRight: 10 }}>
                           <Icon.Button
@@ -216,7 +259,9 @@ export default function App(props) {
                   }
                 }
               }}
-            />
+            >
+              {props => <MainScreen {...props} dropdownValue={value} />}
+            </Stack.Screen>
             <Stack.Screen
               key={Date.now()}
               name="Save"
@@ -349,3 +394,18 @@ export default function App(props) {
     );
   }
 }
+const styles = StyleSheet.create({
+  dropdown: {
+    width:140, 
+    height:20, 
+    borderColor:'blue'
+  },
+  placeholderStyle: {
+    fontWeight: "500", 
+    fontSize: 18
+  },
+  selectedTextStyle: {
+    fontWeight: "500", 
+    fontSize: 18
+  },
+});

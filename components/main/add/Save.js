@@ -83,6 +83,7 @@ function Save(props) {
     const taskProgress = (snapshot) => {
       console.log(`transferred: ${snapshot.bytesTransferred}`);
     };
+    
 
     const taskCompleted = async () => {
       getDownloadURL(task.snapshot.ref).then(async (url) => {
@@ -126,15 +127,15 @@ function Save(props) {
 
     task.on("state_changed", taskProgress, taskError, taskCompleted);
   };
-
+  // console.log("reference doc", doc(collection(db,"users"),auth.currentUser.uid))
   const savePostData = async (downloadURL, downloadURLStill) => {
     let object = {
       downloadURL: downloadURL,
       caption: caption,
-      likesCount: 0,
       commentsCount: 0,
       type: props.route.params.type,
       creation: serverTimestamp(),
+      uid: props.currentUser.uid
     };
     if (downloadURLStill != null) {
       object.downloadURLStill = downloadURLStill;
@@ -146,7 +147,10 @@ function Save(props) {
     try {
       await addDoc(userPostsCollectionRef, object);
       props.fetchUserPosts();
-      props.navigation.popToTop();
+      // find another way to do this
+      props.navigation.navigate("Main", {
+        screen: "Feed"
+      });
     } catch (error) {
       setUploading(false);
       setError(true);
@@ -286,7 +290,7 @@ function Save(props) {
                 <Image
                   style={container.image}
                   source={{ uri: props.route.params.source }}
-                  style={{ aspectRatio: 1 / 1, backgroundColor: "black" }}
+                  // style={{ aspectRatio: 1 / 1, backgroundColor: "black" }}
                 />
               ) : (
                 <Video
