@@ -45,7 +45,8 @@ function Main(props) {
             opacity: 0,
           },
         }}
-        barStyle={{ backgroundColor: "#ffffff" }}
+        activeColor="#1E88E5"
+        barStyle={{ backgroundColor: "#fff" }}
       >
         <Tab.Screen
           name="Profile"

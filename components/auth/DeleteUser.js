@@ -1,5 +1,5 @@
 import { FontAwesome5 } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   TouchableOpacity,
@@ -8,34 +8,33 @@ import {
   View,
   Image,
 } from "react-native";
-import { container, text, utils } from "../../styles";
+import { container, text, utils } from "../styles";
 import Icon from "react-native-vector-icons/Ionicons";
-import SearchInput, { createFilter } from "react-native-search-filter";
 import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "../../../firebase_config/firebaseConfig";
-import { getFirestore, collection, query, getDocs } from "firebase/firestore";
+import { firebaseConfig } from "../../firebase_config/firebaseConfig";
+import {
+  getFirestore,
+  collection,
+  doc,
+  query,
+  getDocs,
+  deleteDoc,
+} from "firebase/firestore";
 
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 
-function Search(props) {
-  const KEYS_TO_FILTERS = [
-    "username",
-    "name",
-    "org_of_internship",
-    "org_of_placement",
-    "branch",
-    "year_of_study",
-    "academic_proficiency",
-    "technical_skills",
-    "department",
-    "designation",
-    "technical_club_cultural_club_nss_ncc_sports",
-  ];
-  const [searchTerm, setSearchTerm] = useState("");
+const deleteUser = async (userid) => {
+  console.log(userid);
+  const usersCollectionRef = collection(db, "users");
+  const docRef = doc(usersCollectionRef, userid);
+  await deleteDoc(docRef);
+};
+function DeleteUser(props) {
   const [users, setUsers] = useState([]);
   const usersCollectionRef = collection(db, "users");
   const q = query(usersCollectionRef);
+  useEffect(() => {}, [users]);
   try {
     getDocs(q).then((snapshot) => {
       let result = snapshot.docs.map((doc) => {
@@ -48,33 +47,20 @@ function Search(props) {
   } catch (err) {
     console.log(err);
   }
-  const profilelogo = require("./../../../assets/profile.png");
-  const filteredUsers = users.filter(createFilter(searchTerm, KEYS_TO_FILTERS));
+  const profilelogo = require("./../../assets/profile.png");
   return (
     <View style={styles.container}>
-      <SearchInput
-        onChangeText={(term) => {
-          setSearchTerm(term);
-        }}
-        style={styles.searchInput}
-        placeholder="Type here..."
-      />
       <ScrollView>
-        {filteredUsers.map((user) => {
+        {users.map((user) => {
           return (
             <TouchableOpacity
-              onPress={() =>
-                props.navigation.navigate("Profile", {
-                  uid: user.id,
-                  username: undefined,
-                })
-              }
+              onPress={() => deleteUser(user.id)}
               key={user.id}
               style={styles.emailItem}
             >
               <View style={{ flexDirection: "row" }}>
                 <View style={{ ...utils.justifyCenter }}>
-                  <Icon name="search" color="#64B5F6" size={15} />
+                  <Icon name="close" color="#64B5F6" size={15} />
                 </View>
                 <View style={{ ...utils.justifyCenter, marginLeft: 15 }}>
                   <Text style={text.username}>{user.username}</Text>
@@ -129,4 +115,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Search;
+export default DeleteUser;
