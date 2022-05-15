@@ -1,7 +1,7 @@
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { getAuth } from "firebase/auth";
-import React, { useEffect, useState } from "react";
-import { View } from "react-native";
+import React, { useEffect,useLayoutEffect, useState } from "react";
+import { View ,Text} from "react-native";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { reload } from "../redux/actions/index";
@@ -20,7 +20,7 @@ function Main(props) {
   useEffect(() => {
     props.reload();
   }, []);
-
+ 
   useEffect(() => {
     setUnreadChats(false);
     for (let i = 0; i < props.chats.length; i++) {
@@ -29,10 +29,10 @@ function Main(props) {
       }
     }
   }, [props.currentUser, props.chats]);
-  // console.log(props.currentUser);
   if (props.currentUser == null) {
     return <View></View>;
   }
+  console.log("dropdownValue",props.dropdownValue)
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
       <Tab.Navigator
@@ -67,13 +67,13 @@ function Main(props) {
         <Tab.Screen
           key={Date.now()}
           name="Feed"
-          component={FeedScreen}
+          navigation={props.navigation}
           options={{
             tabBarIcon: ({ color, size }) => (
               <Icon name="ios-home" color={color} size={26} />
             ),
           }}
-        />
+        >{() => <FeedScreen  dropdownValue={props.dropdownValue} />}</Tab.Screen>
         {props.currentUser.type !== "Student" &&
           props.currentUser.type !== "Faculty" && (
             <Tab.Screen

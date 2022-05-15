@@ -30,7 +30,7 @@ export default function VideoScreen(props) {
   const [isCameraReady, setIsCameraReady] = useState(false);
   const [isFlash, setIsFlash] = useState(false);
   const [isVideoRecording, setIsVideoRecording] = useState(false);
-  const [type, setType] = useState(0);
+  const [type, setType] = useState(1);
   const [showGallery, setShowGallery] = useState(false);
   const [galleryItems, setGalleryItems] = useState([]);
   const [galleryScrollRef, setGalleryScrollRef] = useState(null);
@@ -48,12 +48,12 @@ export default function VideoScreen(props) {
         audioPermissions.status === "granted" &&
         galleryPermissions.status === "granted"
       ) {
-        // const getPhotos = await MediaLibrary.getAssetsAsync({
-        //   sortBy: ["creationTime"],
-        //   mediaType: ["photo", "video"],
-        // });
-        // setGalleryItems(getPhotos);
-        // setGalleryPickedImage(getPhotos.assets[0]);
+        const getPhotos = await MediaLibrary.getAssetsAsync({
+          sortBy: ["creationTime"],
+          mediaType: ["photo", "video"],
+        });
+        setGalleryItems(getPhotos);
+        setGalleryPickedImage(getPhotos.assets[0]);
         setHasPermission(true);
       }
     })();
@@ -198,7 +198,8 @@ export default function VideoScreen(props) {
             color="black"
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}}>
+        {/* HAVE TO ADD FUNCTIONALITY OF GALLERY */}
+        <TouchableOpacity onPress={() => setShowGallery(true)}>
           <Feather
             style={utils.margin15}
             name={"image"}
@@ -226,9 +227,9 @@ export default function VideoScreen(props) {
       >
         <View style={[{ aspectRatio: 1 / 1, height: WINDOW_WIDTH }]}>
           <Image
-            style={{ flex: 1 }}
-            source={{ uri: galleryPickedImage.uri }}
-            style={[{ aspectRatio: 1 / 1, height: WINDOW_WIDTH }]}
+            style={{ flex: 1, aspectRatio: 1 / 1, height: WINDOW_WIDTH }}
+            source={{ uri: (galleryPickedImage.uri ? galleryPickedImage.uri : "https://picsum.photos/id/237/200/300") }}
+            // style={[{  }]}
             ratio={"1:1"}
           />
         </View>
@@ -310,14 +311,14 @@ export default function VideoScreen(props) {
         {isFocused ? (
           <Camera
             ref={cameraRef}
-            style={{ flex: 1 }}
+            style={{ flex: 1, aspectRatio: 1 / 1, height: WINDOW_WIDTH }}
             type={cameraType}
             flashMode={
               isFlash
                 ? Camera.Constants.FlashMode.torch
                 : Camera.Constants.FlashMode.off
             }
-            style={[{ aspectRatio: 1 / 1, height: WINDOW_WIDTH }]}
+            // style={{  }}
             ratio={"1:1"}
             onCameraReady={onCameraReady}
           />

@@ -1,5 +1,5 @@
 import { Entypo, Feather, FontAwesome5 } from "@expo/vector-icons";
-import { useIsFocused } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { Video } from "expo-av";
 import VideoPlayer from "expo-video-player";
 import React, { useEffect, useRef, useState } from "react";
@@ -46,7 +46,7 @@ const WINDOW_WIDTH = Dimensions.get("window").width;
 
 function Post(props) {
   const [item, setItem] = useState(props.route.params.item);
-  const [user, setUser] = useState(props.route.params.user);
+  const [user, setUser] = useState(null);
   const [currentUserLike, setCurrentUserLike] = useState(false);
   const [unmutted, setUnmutted] = useState(true);
   const [videoref, setvideoref] = useState(null);
@@ -55,21 +55,23 @@ function Post(props) {
   const [isValid, setIsValid] = useState(true);
   const [exists, setExists] = useState(false);
   const [loaded, setLoaded] = useState(false);
-
+  const navigation = useNavigation()
   const isFocused = useIsFocused();
   useEffect(async () => {
-    if (props.route.params.notification != undefined) {
+    // if (props.route.params.notification != undefined) {
+      console.log("current uid", props.route.params.item.uid)
       const usersCollectionRef = collection(db, "users");
-      const userDocRef = doc(usersCollectionRef, props.route.params.user.uid);
+      const userDocRef = doc(usersCollectionRef, props.route.params.item.uid);
       const snapshot = await getDoc(userDocRef);
       if (snapshot.exists) {
         let user = snapshot.data();
+        // console.log("Snapshott",snapshot)
         user.uid = snapshot.id;
-
+        console.log("user uid in post", user)
         setUser(user);
       }
       const postsCollectionRef = collection(db, "posts");
-      const userRef = doc(postsCollectionRef, props.route.params.user.uid);
+      const userRef = doc(postsCollectionRef, props.route.params.item.uid);
       const userPostsCollectionRef = collection(userRef, "userPosts");
       const postDocRef = doc(
         userPostsCollectionRef,
@@ -83,37 +85,38 @@ function Post(props) {
         setLoaded(true);
         setExists(true);
       }
-      const likesCollectionRef = collection(postDocRef, "likes");
-      const authUserDocRef = doc(likesCollectionRef, auth.currentUser.uid);
-      onSnapshot(authUserDocRef, (snapshot) => {
-        let currentUserLike = false;
-        if (snapshot.exists) {
-          currentUserLike = true;
-        }
-        setCurrentUserLike(currentUserLike);
-      });
-    } else {
-      const postsCollectionRef = collection(db, "posts");
-      const userRef = doc(postsCollectionRef, props.route.params.user.uid);
-      const userPostsCollectionRef = collection(userRef, "userPosts");
-      const postDocRef = doc(
-        userPostsCollectionRef,
-        props.route.params.item.id
-      );
-      const likesCollectionRef = collection(postDocRef, "likes");
-      const authUserDocRef = doc(likesCollectionRef, auth.currentUser.uid);
-      onSnapshot(authUserDocRef, (snapshot) => {
-        let currentUserLike = false;
-        if (snapshot.exists) {
-          currentUserLike = true;
-        }
-        setCurrentUserLike(currentUserLike);
-      });
-      setItem(props.route.params.item);
-      setUser(props.route.params.user);
-      setLoaded(true);
-      setExists(true);
-    }
+      // const likesCollectionRef = collection(postDocRef, "likes");
+      // const authUserDocRef = doc(likesCollectionRef, auth.currentUser.uid);
+      // onSnapshot(authUserDocRef, (snapshot) => {
+      //   let currentUserLike = false;
+      //   if (snapshot.exists) {
+      //     currentUserLike = true;
+      //   }
+      //   setCurrentUserLike(currentUserLike);
+      // });
+    // } else {
+    //   console.log("in else")
+    //   const postsCollectionRef = collection(db, "posts");
+    //   const userRef = doc(postsCollectionRef, props.route.params.item.uid);
+    //   const userPostsCollectionRef = collection(userRef, "userPosts");
+    //   const postDocRef = doc(
+    //     userPostsCollectionRef,
+    //     props.route.params.item.id
+    //   );
+    //   const likesCollectionRef = collection(postDocRef, "likes");
+    //   const authUserDocRef = doc(likesCollectionRef, auth.currentUser.uid);
+    //   onSnapshot(authUserDocRef, (snapshot) => {
+    //     let currentUserLike = false;
+    //     if (snapshot.exists) {
+    //       currentUserLike = true;
+    //     }
+    //     setCurrentUserLike(currentUserLike);
+    //   });
+    //   setItem(props.route.params.item);
+    //   setUser(props.route.params.user);
+    //   setLoaded(true);
+    //   setExists(true);
+    // }
   }, [props.route.params.notification, props.route.params.item]);
 
   useEffect(() => {
@@ -134,43 +137,43 @@ function Post(props) {
   }, [props.route.params.index, props.route.params.inViewPort]);
 
   const onUsernamePress = (username, matchIndex) => {
-    props.navigation.navigate("ProfileOther", { username, uid: undefined });
+    navigation.navigate("ProfileOther", { username, uid: undefined });
   };
 
-  const onLikePress = async (userId, postId, item) => {
-    item.likesCount += 1;
-    setCurrentUserLike(true);
-    const postsCollectionRef = collection(db, "posts");
-    const userRef = doc(postsCollectionRef, userId);
-    const userPostsCollectionRef = collection(userRef, "userPosts");
-    const postDocRef = doc(userPostsCollectionRef, postId);
-    const likesCollectionRef = collection(postDocRef, "likes");
-    const authUserDocRef = doc(likesCollectionRef, auth.currentUser.uid);
-    await setDoc(authUserDocRef, {});
-    await updateDoc(postDocRef, {
-      likesCount: increment(1),
-    });
-    props.sendNotification(
-      user.notificationToken,
-      "New Like",
-      `${props.currentUser.name} liked your post`,
-      { type: 0, postId, user: auth.currentUser.uid }
-    );
-  };
-  const onDislikePress = async (userId, postId, item) => {
-    item.likesCount -= 1;
-    setCurrentUserLike(false);
-    const postsCollectionRef = collection(db, "posts");
-    const userRef = doc(postsCollectionRef, userId);
-    const userPostsCollectionRef = collection(userRef, "userPosts");
-    const postDocRef = doc(userPostsCollectionRef, postId);
-    const likesCollectionRef = collection(postDocRef, "likes");
-    const authUserDocRef = doc(likesCollectionRef, auth.currentUser.uid);
-    await deleteDoc(authUserDocRef);
-    await updateDoc(postDocRef, {
-      likesCount: increment(-1),
-    });
-  };
+  // const onLikePress = async (userId, postId, item) => {
+  //   item.likesCount += 1;
+  //   setCurrentUserLike(true);
+  //   const postsCollectionRef = collection(db, "posts");
+  //   const userRef = doc(postsCollectionRef, userId);
+  //   const userPostsCollectionRef = collection(userRef, "userPosts");
+  //   const postDocRef = doc(userPostsCollectionRef, postId);
+  //   const likesCollectionRef = collection(postDocRef, "likes");
+  //   const authUserDocRef = doc(likesCollectionRef, auth.currentUser.uid);
+  //   await setDoc(authUserDocRef, {});
+  //   await updateDoc(postDocRef, {
+  //     likesCount: increment(1),
+  //   });
+  //   props.sendNotification(
+  //     user.notificationToken,
+  //     "New Like",
+  //     `${props.currentUser.name} liked your post`,
+  //     { type: 0, postId, user: auth.currentUser.uid }
+  //   );
+  // };
+  // const onDislikePress = async (userId, postId, item) => {
+  //   item.likesCount -= 1;
+  //   setCurrentUserLike(false);
+  //   const postsCollectionRef = collection(db, "posts");
+  //   const userRef = doc(postsCollectionRef, userId);
+  //   const userPostsCollectionRef = collection(userRef, "userPosts");
+  //   const postDocRef = doc(userPostsCollectionRef, postId);
+  //   const likesCollectionRef = collection(postDocRef, "likes");
+  //   const authUserDocRef = doc(likesCollectionRef, auth.currentUser.uid);
+  //   await deleteDoc(authUserDocRef);
+  //   await updateDoc(postDocRef, {
+  //     likesCount: increment(-1),
+  //   });
+  // };
   if (!exists && loaded) {
     return (
       <View
@@ -233,7 +236,7 @@ function Post(props) {
           <TouchableOpacity
             style={[container.horizontal, { alignItems: "center" }]}
             onPress={() =>
-              props.navigation.navigate("ProfileOther", {
+              navigation.navigate("ProfileOther", {
                 uid: user.uid,
                 username: undefined,
               })
@@ -248,6 +251,7 @@ function Post(props) {
               />
             ) : (
               <Image
+                key ={user.image}
                 style={[utils.profileImageSmall]}
                 source={{
                   uri: user.image,
@@ -345,8 +349,9 @@ function Post(props) {
               </View>
             ) : (
               <View style={{ marginTop: 4 }}>
-                <CachedImage
-                  cacheKey={item.id}
+                <Image
+                  // cacheKey={item.id}
+                  key ={item.downloadURLStill}
                   style={[container.image]}
                   source={{ uri: item.downloadURLStill }}
                 />
@@ -354,36 +359,22 @@ function Post(props) {
             )}
           </View>
         ) : (
-          <CachedImage
-            cacheKey={item.id}
+          <Image
+            // cacheKey={item.id}
+            key ={item.downloadURL}
             style={container.image}
             source={{ uri: item.downloadURL }}
           />
         )}
 
         <View style={[utils.padding10, container.horizontal]}>
-          {currentUserLike ? (
-            <Entypo
-              name="heart"
-              size={30}
-              color="red"
-              onPress={() => onDislikePress(user.uid, item.id, item)}
-            />
-          ) : (
-            <Feather
-              name="heart"
-              size={30}
-              color="black"
-              onPress={() => onLikePress(user.uid, item.id, item)}
-            />
-          )}
           <Feather
-            style={utils.margin15Left}
+            // style={utils.margin15Left}
             name="message-square"
             size={30}
             color="black"
             onPress={() =>
-              props.navigation.navigate("Comment", {
+                navigation.navigate("Comment", {
                 postId: item.id,
                 uid: user.uid,
                 user,
@@ -396,7 +387,7 @@ function Post(props) {
             size={26}
             color="black"
             onPress={() =>
-              props.navigation.navigate("ChatList", {
+                navigation.navigate("ChatList", {
                 postId: item.id,
                 post: { ...item, user: user },
                 share: true,
@@ -404,13 +395,13 @@ function Post(props) {
             }
           />
         </View>
+        
         <View style={[container.container, utils.padding10Sides]}>
-          <Text style={[text.bold, text.medium]}>{item.likesCount} likes</Text>
           <Text style={[utils.margin15Right, utils.margin5Bottom]}>
             <Text
               style={[text.bold]}
               onPress={() =>
-                props.navigation.navigate("ProfileOther", {
+                  navigation.navigate("ProfileOther", {
                   uid: user.uid,
                   username: undefined,
                 })
@@ -418,7 +409,6 @@ function Post(props) {
             >
               {user.name}
             </Text>
-
             <Text> </Text>
             <ParsedText
               parse={[
@@ -432,27 +422,14 @@ function Post(props) {
               {item.caption}
             </ParsedText>
           </Text>
-          <Text
-            style={[text.grey, utils.margin5Bottom]}
-            onPress={() =>
-              props.navigation.navigate("Comment", {
-                postId: item.id,
-                uid: user.uid,
-                user,
-              })
-            }
-          >
-            View all {item.commentsCount} Comments
-          </Text>
-          <Text style={[text.grey, text.small, utils.margin5Bottom]}>
-            {timeDifference(new Date(), item.creation.toDate())}
-          </Text>
         </View>
       </View>
 
-      <BottomSheet
+      
+
+      {/* <BottomSheet
         bottomSheerColor="#FFFFFF"
-        ref={setSheetRef}
+        ref={sheetRef}
         initialPosition={0} //200, 300
         snapPoints={[300, 0]}
         isBackDrop={true}
@@ -516,7 +493,7 @@ function Post(props) {
         }}
       >
         {isValid.message}
-      </Snackbar>
+      </Snackbar> */}
     </View>
   );
 }
@@ -532,6 +509,6 @@ const mapDispatchProps = (dispatch) =>
   bindActionCreators(
     { sendNotification, fetchUserPosts, deletePost },
     dispatch
-  );
+  )
 
 export default connect(mapStateToProps, mapDispatchProps)(Post);
