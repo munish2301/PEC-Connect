@@ -6,7 +6,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import "expo-asset";
 import _ from "lodash";
 import React from "react";
-import { View, Image, LogBox, Text, Picker} from "react-native";
+import { View, Image, LogBox, Text, Picker } from "react-native";
 import { Provider } from "react-redux";
 import { applyMiddleware, createStore } from "redux";
 import thunk from "redux-thunk";
@@ -36,10 +36,9 @@ import { firebaseConfig } from "./firebase_config/firebaseConfig";
 import { useState, useEffect } from "react";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import {Dropdown} from "react-native-element-dropdown"
+import { Dropdown } from "react-native-element-dropdown";
 import { StyleSheet } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 LogBox.ignoreLogs(["Setting a timer"]);
@@ -64,7 +63,7 @@ export default function App(props) {
   const [loggedIn, setloggedIn] = useState(false);
   const [user, setUser] = useState({});
   const { colors } = useTheme();
-  const [value, setValue] = useState("PecConnect");
+  const [value, setValue] = useState("PEC Connect");
   const [isFocus, setIsFocus] = useState(false);
 
   let userDocRef = null;
@@ -92,12 +91,12 @@ export default function App(props) {
   //   );
   // }
   const dropdownOptions = [
-    { label: 'PecConnect', value: 'PecConnect' },
-    { label: 'NSS', value: 'NSS' },
-    { label: 'NCC', value: 'NCC' },
-    { label: 'Tech', value: 'Tech' },
-    { label: 'Cultural', value: 'Cultural' },
-    { label: 'Sports', value: 'Sports' },
+    { label: "PEC Connect", value: "PEC Connect" },
+    { label: "NSS", value: "NSS" },
+    { label: "NCC", value: "NCC" },
+    { label: "Tech", value: "Tech" },
+    { label: "Cultural", value: "Cultural" },
+    { label: "Sports", value: "Sports" },
   ];
   if (!loaded) {
     return (
@@ -300,29 +299,32 @@ export default function App(props) {
                   }
                   case "Feed":
                   default: {
-                    return { 
+                    return {
                       headerTitle: "",
                       headerLeft: () => (
-                        <View style = {{marginLeft: 20 }}>
+                        <View style={{ marginLeft: 20 }}>
                           <Dropdown
-                            style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                            style={[
+                              styles.dropdown,
+                              isFocus && { borderColor: "blue" },
+                            ]}
                             placeholderStyle={styles.placeholderStyle}
                             selectedTextStyle={styles.selectedTextStyle}
-                            containerStyle ={{borderTopWidth:0 }}
+                            containerStyle={{ borderTopWidth: 0 }}
                             data={dropdownOptions}
                             maxHeight={180}
-                            dropdownPosition ="bottom"
+                            dropdownPosition="bottom"
                             labelField="label"
                             valueField="value"
-                            placeholder={!isFocus ? 'PecConnect' : value}
+                            placeholder={!isFocus ? "PEC Connect" : value}
                             value={value}
                             onFocus={() => setIsFocus(true)}
-                            onChange={item => {
-                              setValue(item.value)
+                            onChange={(item) => {
+                              setValue(item.value);
                               setIsFocus(false);
                             }}
                           />
-                        </View> 
+                        </View>
                       ),
                       headerRight: () => (
                         <View style={{ marginRight: 10 }}>
@@ -343,7 +345,7 @@ export default function App(props) {
                 }
               }}
             >
-              {props => <MainScreen {...props} dropdownValue={value} />}
+              {(props) => <MainScreen {...props} dropdownValue={value} />}
             </Stack.Screen>
             <Stack.Screen
               key={Date.now()}
@@ -501,16 +503,16 @@ export default function App(props) {
 }
 const styles = StyleSheet.create({
   dropdown: {
-    width:140, 
-    height:20, 
-    borderColor:'blue'
+    width: 140,
+    height: 20,
+    borderColor: "blue",
   },
   placeholderStyle: {
-    fontWeight: "500", 
-    fontSize: 18
+    fontWeight: "500",
+    fontSize: 18,
   },
   selectedTextStyle: {
-    fontWeight: "500", 
-    fontSize: 18
+    fontWeight: "500",
+    fontSize: 18,
   },
 });
